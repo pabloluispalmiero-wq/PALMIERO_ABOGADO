@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Estudio Jurídico</title>
+<title>Estudio Talavera & Palmiero</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -264,10 +264,10 @@ textarea{resize:vertical;min-height:75px;}
 <body>
 
 <!-- LOGIN SCREEN -->
-<div id="login-screen">
+<div id="login-screen" class="visible">
   <div class="login-box">
     <div class="login-logo">Estudio<br>Jurídico</div>
-    <div class="login-sub">Dr. Pablo Palmiero</div>
+    <div class="login-sub">Estudio Talavera &amp; Palmiero</div>
     <div class="login-field">
       <label>Email</label>
       <input type="email" id="login-email" placeholder="pablo.palmiero@gmail.com" value="pabloluispalmiero@gmail.com">
@@ -281,7 +281,7 @@ textarea{resize:vertical;min-height:75px;}
   </div>
 </div>
 
-<div class="app" id="main-app" style="display:flex">
+<div class="app" id="main-app" style="display:none">
 
 <button class="hamburger" onclick="toggleSB()">☰</button>
 <div class="overlay-bg" id="overlay" onclick="toggleSB()"></div>
@@ -289,7 +289,7 @@ textarea{resize:vertical;min-height:75px;}
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="logo">
-    <div class="logo-name">Estudio<br>Jurídico</div>
+    <div class="logo-name">Talavera &amp;<br>Palmiero</div>
     <div class="logo-sub">Panel de Control</div>
   </div>
   <nav>
@@ -324,7 +324,7 @@ textarea{resize:vertical;min-height:75px;}
 <!-- DASHBOARD -->
 <div class="page active" id="page-dashboard">
   <div class="ph">
-    <div><div class="ph-title">Dr. Pablo Palmiero</div><div class="ph-sub" id="hoy-label"></div></div>
+    <div><div class="ph-title">Estudio Talavera & Palmiero</div><div class="ph-sub" id="hoy-label"></div></div>
     <button class="btn btn-ghost btn-sm" onclick="goTo('finanzas',document.querySelector('[onclick*=finanzas]'))">Ver finanzas completas →</button>
   </div>
 
@@ -923,8 +923,8 @@ textarea{resize:vertical;min-height:75px;}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ── SUPABASE ──
-const SUPA_URL = 'https://ggcomxofltwuuobamolx.supabase.co';
-const SUPA_KEY = 'sb_publishable_knPq6RaUpDgENC6FVV94eQ_dnOzHwpp';
+const SUPA_URL = 'https://bpgvrhgozkveqqvvtgse.supabase.co';
+const SUPA_KEY = 'sb_publishable_65Hy-Qgy5YtKZM7cXageig_-wH86NMo';
 const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
 
 // ── AUTH ──
@@ -970,7 +970,7 @@ async function checkSession(){
   // Si no hay sesión, la pantalla de login ya está visible
 }
 
-const DOC_ID = 'estudio-palmiero'; // ID único del documento en la base de datos
+const DOC_ID = 'estudio-talavera-palmiero'; // ID único del documento en la base de datos
 
 // ── STATE ──
 let S={expedientes:[],clientes:[],vencimientos:[],honorarios:[],pagos:[],gastos:[],actos:[],pagosExt:[],profesionales:[]};
@@ -2144,7 +2144,7 @@ function exportBalance(){
 
     // ── Hoja 1: Resumen ──
     const resumen=[
-      ['BALANCE MENSUAL — Dr. Pablo Palmiero'],
+      ['BALANCE MENSUAL — Estudio Talavera & Palmiero'],
       ['Período:', mesLabel],
       ['Generado:', fmt2(new Date().toISOString().split('T')[0])],
       [],
@@ -2263,7 +2263,7 @@ function exportBalanceOLD_UNUSED(){
   const money2=(n)=>'$'+Number(n||0).toLocaleString('es-AR');
 
   let html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
-  <title>Balance ${mesLabel} — Dr. Pablo Palmiero</title>
+  <title>Balance ${mesLabel} — Estudio Talavera & Palmiero</title>
   <style>
     body{font-family:Arial,sans-serif;font-size:13px;color:#1a1d26;padding:30px 40px;max-width:900px;margin:0 auto;}
     h1{font-size:22px;margin-bottom:4px;color:#1a1d26;}
@@ -2318,7 +2318,7 @@ function exportBalanceOLD_UNUSED(){
 .logout-btn:hover{background:var(--surface2);color:var(--red);}
 </style></head><body>
   <button class="no-print" onclick="window.print()" style="background:#b8860b;color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:13px;margin-bottom:20px">🖨 Imprimir / Guardar PDF</button>
-  <h1>Balance Mensual — Dr. Pablo Palmiero</h1>
+  <h1>Balance Mensual — Estudio Talavera & Palmiero</h1>
   <div class="sub">Período: <b>${mesLabel}</b> &nbsp;·&nbsp; Generado el ${fmt2(new Date().toISOString().split('T')[0])}</div>
 
   <div class="cards">
@@ -2381,7 +2381,7 @@ function exportBalanceOLD_UNUSED(){
     html+=`</tbody></table>`;
   }
 
-  html+=`<div class="footer">Documento generado por el sistema de gestión del Estudio Jurídico Dr. Pablo Palmiero</div>
+  html+=`<div class="footer">Documento generado por el sistema de gestión del Estudio Jurídico Estudio Talavera & Palmiero</div>
   </body></html>`;
 
   const win=window.open('','_blank');
@@ -2396,7 +2396,7 @@ function backupData(){
   const backup={
     version:'1.0',
     fecha,
-    estudio:'Dr. Pablo Palmiero',
+    estudio:'Estudio Talavera & Palmiero',
     data:S
   };
   const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
