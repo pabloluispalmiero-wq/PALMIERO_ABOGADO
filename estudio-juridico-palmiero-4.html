@@ -1,0 +1,3207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Estudio Jurídico</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#1c1f2a;--surface:#242836;--surface2:#2c3044;--surface3:#353a50;
+  --border:#3e4560;--gold:#c9a84c;--gold-lt:#ddb95a;--gold-dim:rgba(201,168,76,.15);
+  --text:#e8e4d8;--text-sub:#9a96a0;--text-dim:#5e5e6e;
+  --green:#4caf78;--green-dim:rgba(76,175,120,.15);
+  --red:#d96060;--red-dim:rgba(217,96,96,.15);
+  --orange:#d4884a;--orange-dim:rgba(212,136,74,.15);
+  --blue:#5a90cc;--blue-dim:rgba(90,144,204,.15);
+  --radius:10px;--shadow:0 4px 20px rgba(0,0,0,.30);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);font-size:16.5px;}
+.app{display:flex;height:100vh;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;transition:transform .3s;z-index:200;}
+.logo{padding:22px 20px 18px;border-bottom:1px solid var(--border);}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--gold);line-height:1.2;}
+.logo-sub{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-top:3px;}
+nav{padding:12px 10px;flex:1;}
+.nav-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);padding:12px 10px 5px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;font-size:14.5px;color:var(--text-sub);transition:all .15s;margin-bottom:2px;font-weight:500;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:var(--gold-dim);color:var(--gold);}
+.nav-icon{font-size:16px;width:20px;text-align:center;}
+.badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;padding:1px 7px;border-radius:10px;font-weight:600;}
+
+/* HAMBURGER */
+.hamburger{display:none;position:fixed;top:14px;left:14px;z-index:300;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 9px;cursor:pointer;font-size:18px;color:var(--text);box-shadow:var(--shadow);}
+.overlay-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;padding:28px 28px 40px;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* PAGE HEADER */
+.ph{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+.ph-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--text);}
+.ph-sub{font-size:12px;color:var(--text-sub);margin-top:2px;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;transition:all .15s;}
+.btn-gold{background:var(--gold);color:#1e1c16;}
+.btn-gold:hover{background:var(--gold-lt);}
+.btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+.btn-danger{background:var(--red-dim);color:var(--red);border:1px solid transparent;}
+.btn-danger:hover{border-color:var(--red);}
+.btn-sm{padding:5px 12px;font-size:12px;}
+.btn-xs{padding:3px 8px;font-size:11px;}
+
+/* STAT CARDS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.scard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;position:relative;overflow:hidden;box-shadow:var(--shadow);}
+.scard::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;}
+.scard.gold::after{background:var(--gold);}
+.scard.green::after{background:var(--green);}
+.scard.red::after{background:var(--red);}
+.scard.blue::after{background:var(--blue);}
+.scard.orange::after{background:var(--orange);}
+.sc-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-sub);}
+.sc-val{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;margin:6px 0 2px;line-height:1;}
+.scard.gold .sc-val{color:var(--gold);}
+.scard.green .sc-val{color:var(--green);}
+.scard.red .sc-val{color:var(--red);}
+.scard.blue .sc-val{color:var(--blue);}
+.scard.orange .sc-val{color:var(--orange);}
+.sc-detail{font-size:11px;color:var(--text-dim);}
+
+/* TABLE CARD */
+.tcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px;box-shadow:var(--shadow);}
+.tcard-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px;}
+.tcard-title{font-size:15.5px;font-weight:700;color:var(--text);}
+.search-wrap{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:6px 12px;}
+.search-wrap input{background:none;border:none;outline:none;color:var(--text);font-family:'Nunito',sans-serif;font-size:13px;width:180px;}
+.search-wrap input::placeholder{color:var(--text-dim);}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--surface2);}
+th{text-align:left;padding:11px 18px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-sub);font-weight:600;border-bottom:1px solid var(--border);}
+td{padding:13px 18px;font-size:14.5px;border-bottom:1px solid var(--border);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:rgba(255,255,255,.04);}
+.td-main{font-weight:600;color:var(--text);}
+.td-sub{font-size:11px;color:var(--text-sub);margin-top:2px;}
+
+/* TAGS */
+.tag{display:inline-block;padding:3px 9px;border-radius:5px;font-size:11px;font-weight:600;letter-spacing:.03em;}
+.tag-active{background:var(--green-dim);color:var(--green);}
+.tag-pending{background:var(--orange-dim);color:var(--orange);}
+.tag-closed{background:rgba(255,255,255,.07);color:var(--text-sub);}
+.tag-civil{background:var(--blue-dim);color:var(--blue);}
+.tag-penal{background:var(--red-dim);color:var(--red);}
+.tag-laboral{background:var(--gold-dim);color:var(--gold);}
+.tag-familia{background:rgba(162,100,200,.15);color:#b07ddb;}
+.tag-urgente{background:var(--red-dim);color:var(--red);border:1px solid var(--red);}
+
+/* MODAL */
+.modal-wrap{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:400;align-items:center;justify-content:center;padding:16px;}
+.modal-wrap.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;padding:28px 30px;box-shadow:var(--shadow);}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--gold);margin-bottom:20px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fg.full{grid-column:1/-1;}
+label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-sub);}
+input,select,textarea{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:10px 13px;color:var(--text);font-family:'Nunito',sans-serif;font-size:15px;outline:none;transition:border-color .15s;width:100%;}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);}
+select option{background:#242836;color:#e8e4d8;}
+textarea{resize:vertical;min-height:75px;}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
+
+/* FINANCE */
+.fin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;}
+.fin-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;}
+.fin-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-sub);}
+.fin-val{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;margin-top:6px;}
+.fin-card.ingreso .fin-val{color:var(--green);}
+.fin-card.gasto .fin-val{color:var(--red);}
+.fin-card.bal-pos .fin-val{color:var(--gold);}
+.fin-card.bal-neg .fin-val{color:var(--red);}
+.fin-card.pendiente .fin-val{color:var(--orange);}
+
+/* PENDING LIST */
+.pend-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
+.pend-row:last-child{border-bottom:none;}
+.pend-name{font-weight:600;font-size:13px;}
+.pend-meta{font-size:11px;color:var(--text-sub);margin-top:2px;}
+.pend-amt{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--orange);font-weight:700;white-space:nowrap;}
+
+/* MONTH SELECTOR */
+.month-row{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.month-row select{width:auto;padding:7px 12px;}
+
+/* VENC LIST */
+.venc-list{padding:8px 16px 12px;}
+.vi{display:flex;gap:13px;padding:12px 0;border-bottom:1px solid var(--border);align-items:flex-start;}
+.vi:last-child{border-bottom:none;}
+.vi-dot{width:10px;height:10px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.dot-r{background:var(--red);box-shadow:0 0 6px var(--red);}
+.dot-o{background:var(--orange);}
+.dot-g{background:var(--gold);}
+.vi-body{flex:1;}
+.vi-title{font-size:13px;font-weight:600;}
+.vi-meta{font-size:11px;color:var(--text-sub);margin-top:2px;}
+.vi-date{text-align:right;font-size:11px;color:var(--text-dim);white-space:nowrap;}
+
+/* CALENDAR */
+.cal-grid-wrap{padding:16px;}
+.cal-days-hdr{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;}
+.cal-dh{text-align:center;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);padding:6px 0;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-day{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px;min-height:80px;transition:border-color .15s;}
+.cal-day:hover{border-color:var(--gold);}
+.cal-day.today{border-color:var(--gold);background:var(--gold-dim);}
+.cal-day.other{opacity:.35;}
+.cal-n{font-size:12px;font-weight:600;color:var(--text-sub);margin-bottom:4px;}
+.cal-day.today .cal-n{color:var(--gold);}
+.cal-ev{font-size:9.5px;padding:2px 5px;border-radius:3px;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cal-ev.urgente{background:var(--red-dim);color:var(--red);}
+.cal-ev.normal{background:var(--blue-dim);color:var(--blue);}
+.cal-ev.aud{background:var(--gold-dim);color:var(--gold);}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+
+/* EMPTY */
+.empty{text-align:center;padding:36px 20px;color:var(--text-dim);}
+.empty-icon{font-size:30px;margin-bottom:8px;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .fin-grid{grid-template-columns:repeat(2,1fr);}
+  .two-col{grid-template-columns:1fr;}
+}
+@media(max-width:700px){
+  .sidebar{position:fixed;top:0;left:0;height:100vh;transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .hamburger{display:block;}
+  .overlay-bg.open{display:block;}
+  .main{padding:62px 14px 40px;}
+  .stats{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .fin-grid{grid-template-columns:1fr 1fr;}
+  .ph-title{font-size:24px;}
+  .modal{padding:20px 18px;}
+  .form-grid{grid-template-columns:1fr;}
+  .fg.full{grid-column:1;}
+  .tcard{overflow:visible;}
+  table thead{display:none;}
+  table tr{display:block;border:1px solid var(--border);border-radius:8px;margin:0 8px 10px;background:var(--surface2);}
+  table tbody{display:block;padding:8px 0;}
+  table td{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-bottom:1px solid var(--border);font-size:12px;}
+  table td:last-child{border-bottom:none;}
+  table td::before{content:attr(data-label);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);font-weight:600;flex-shrink:0;margin-right:8px;}
+  .search-wrap input{width:130px;}
+  .cal-ev{display:none;}
+  .cal-day{min-height:50px;}
+}
+@media(max-width:420px){
+  .stats{grid-template-columns:1fr 1fr;}
+  .fin-grid{grid-template-columns:1fr;}
+  .sc-val{font-size:26px;}
+  .two-col{grid-template-columns:1fr;}
+}
+
+/* DOCS PANEL */
+.doc-panel{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-top:8px;}
+.doc-panel-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-sub);margin-bottom:10px;}
+.doc-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--surface);border:1px solid var(--border);border-radius:7px;margin-bottom:6px;}
+.doc-item:last-child{margin-bottom:0;}
+.doc-icon{font-size:18px;flex-shrink:0;}
+.doc-name{flex:1;font-size:13.5px;font-weight:600;color:var(--text);}
+.doc-type{font-size:11px;color:var(--text-sub);margin-top:1px;}
+.doc-actions{display:flex;gap:6px;flex-shrink:0;}
+.exp-row-docs{background:var(--surface2);}
+.exp-row-docs td{padding:0 18px 14px !important;border-bottom:1px solid var(--border);}
+
+/* HISTORIAL VENCIMIENTOS */
+.hist-item{display:flex;align-items:flex-start;gap:14px;padding:13px 0;border-bottom:1px solid var(--border);}
+.hist-item:last-child{border-bottom:none;}
+.hist-check{width:28px;height:28px;border-radius:50%;background:var(--green-dim);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:1px;}
+.hist-body{flex:1;}
+.hist-title{font-size:14px;font-weight:600;color:var(--text);}
+.hist-meta{font-size:12px;color:var(--text-sub);margin-top:3px;}
+.hist-fecha{text-align:right;font-size:11px;color:var(--text-dim);white-space:nowrap;}
+.hist-cumplido{font-size:11px;color:var(--green);font-weight:600;margin-top:2px;}
+
+/* AGENDA ALERTAS */
+.alerta-strip{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-radius:10px;margin-bottom:10px;border:1px solid;}
+.alerta-strip.rojo{background:rgba(217,96,96,.12);border-color:rgba(217,96,96,.35);color:#e89090;}
+.alerta-strip.amarillo{background:rgba(212,136,74,.12);border-color:rgba(201,168,76,.35);color:#c9a84c;}
+.alerta-strip.verde{background:rgba(76,175,120,.12);border-color:rgba(76,175,120,.35);color:#4caf78;}
+.alerta-icon{font-size:22px;flex-shrink:0;}
+.alerta-body{flex:1;}
+.alerta-title{font-weight:700;font-size:14px;}
+.alerta-detail{font-size:12.5px;margin-top:4px;line-height:1.5;}
+
+/* LOGIN */
+#login-screen{display:none;position:fixed;inset:0;z-index:9000;background:var(--bg);align-items:center;justify-content:center;}
+#login-screen.visible{display:flex;}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px 40px 36px;width:100%;max-width:400px;box-shadow:0 8px 40px rgba(0,0,0,.15);}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);text-align:center;line-height:1.2;margin-bottom:6px;}
+.login-sub{text-align:center;font-size:12px;color:var(--text-sub);letter-spacing:.1em;text-transform:uppercase;margin-bottom:32px;}
+.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.login-field label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-sub);}
+.login-field input{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:11px 14px;color:var(--text);font-family:'Nunito',sans-serif;font-size:15px;outline:none;transition:border-color .15s;width:100%;}
+.login-field input:focus{border-color:var(--gold);}
+.login-btn{width:100%;background:var(--gold);color:#1e1c16;border:none;border-radius:8px;padding:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;transition:background .15s;}
+.login-btn:hover{background:var(--gold-lt);}
+.login-err{color:var(--red);font-size:12.5px;text-align:center;margin-top:10px;min-height:18px;}
+.logout-btn{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:8px;cursor:pointer;font-size:12px;color:var(--text-sub);transition:all .15s;margin-top:auto;margin:12px 10px 0;}
+.logout-btn:hover{background:var(--surface2);color:var(--red);}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Estudio<br>Jurídico</div>
+    <div class="login-sub">Dr. Pablo Palmiero</div>
+    <div class="login-field">
+      <label>Email</label>
+      <input type="email" id="login-email" placeholder="pablo.palmiero@gmail.com" value="pabloluispalmiero@gmail.com">
+    </div>
+    <div class="login-field">
+      <label>Contraseña</label>
+      <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Ingresar al sistema</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<div class="app" id="main-app" style="display:flex">
+
+<button class="hamburger" onclick="toggleSB()">☰</button>
+<div class="overlay-bg" id="overlay" onclick="toggleSB()"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="logo-name">Estudio<br>Jurídico</div>
+    <div class="logo-sub">Panel de Control</div>
+  </div>
+  <nav>
+    <div class="nav-label">Principal</div>
+    <div class="nav-item active" onclick="goTo('dashboard',this)"><span class="nav-icon">⚖</span>Dashboard</div>
+    <div class="nav-label">Gestión</div>
+    <div class="nav-item" onclick="goTo('clientes',this)"><span class="nav-icon">👤</span>Clientes</div>
+    <div class="nav-item" onclick="goTo('expedientes',this)"><span class="nav-icon">⚖️</span>Expedientes Judiciales<span class="badge" id="b-exp">0</span></div>
+    <div class="nav-item" onclick="goTo('actos',this)"><span class="nav-icon">📝</span>Expedientes Extrajudiciales</div>
+    <div class="nav-item" onclick="goTo('vencimientos',this)"><span class="nav-icon">⏰</span>Vencimientos<span class="badge" id="b-venc">0</span></div>
+    <div class="nav-item" onclick="goTo('profesionales',this)"><span class="nav-icon">🧑‍💼</span>Profesionales</div>
+    <div class="nav-label">Finanzas</div>
+    <div class="nav-item" onclick="goTo('finanzas',this)"><span class="nav-icon">💰</span>Finanzas</div>
+    <div class="nav-item" onclick="goTo('agenda',this)"><span class="nav-icon">📅</span>Agenda
+      <span id="b-agenda-hoy" class="badge" style="display:none;background:var(--red)">0</span>
+      <span id="b-agenda-prox" class="badge" style="display:none;background:#b8860b">0</span>
+    </div>
+  </nav>
+  <div style="padding:0 10px;margin-top:8px">
+    <div style="border-top:1px solid var(--border);padding-top:10px">
+      <div class="logout-btn" style="color:var(--blue)" onclick="backupData()">💾 Hacer backup</div>
+      <label class="logout-btn" style="color:var(--text-sub);cursor:pointer" for="restore-input">📂 Restaurar backup</label>
+      <input type="file" id="restore-input" accept=".json" style="display:none" onchange="restoreData(event)">
+    </div>
+  </div>
+  <div class="logout-btn" onclick="doLogout()">🔒 Cerrar sesión</div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- DASHBOARD -->
+<div class="page active" id="page-dashboard">
+  <div class="ph">
+    <div><div class="ph-title">Dr. Pablo Palmiero</div><div class="ph-sub" id="hoy-label"></div></div>
+    <button class="btn btn-ghost btn-sm" onclick="goTo('finanzas',document.querySelector('[onclick*=finanzas]'))">Ver finanzas completas →</button>
+  </div>
+
+  <!-- Fila 1: Estado general -->
+  <div class="stats" style="grid-template-columns:repeat(4,1fr)">
+    <div class="scard gold"><div class="sc-label">Expedientes activos</div><div class="sc-val" id="ds-exp">0</div><div class="sc-detail">causas judiciales</div></div>
+    <div class="scard blue"><div class="sc-label">Trabajos extrajudiciales</div><div class="sc-val" id="ds-actos">0</div><div class="sc-detail">en proceso</div></div>
+    <div class="scard red"><div class="sc-label">Vencimientos urgentes</div><div class="sc-val" id="ds-venc">0</div><div class="sc-detail">próximos 7 días</div></div>
+    <div class="scard" style="background:var(--surface)"><div class="sc-label">Clientes</div><div class="sc-val" style="color:var(--text)" id="ds-clientes">0</div><div class="sc-detail">en cartera</div></div>
+  </div>
+
+  <!-- Fila 2: Finanzas del mes -->
+  <div class="stats" style="grid-template-columns:repeat(4,1fr);margin-top:0">
+    <div class="scard green"><div class="sc-label">Total cobrado este mes</div><div class="sc-val" id="ds-ingreso">$0</div><div class="sc-detail">judicial + extrajudicial</div></div>
+    <div class="scard orange"><div class="sc-label">Total pendiente de cobro</div><div class="sc-val" id="ds-pend">$0</div><div class="sc-detail">judicial + extrajudicial</div></div>
+    <div class="scard red"><div class="sc-label">Gastos del mes</div><div class="sc-val" id="ds-gastos">$0</div><div class="sc-detail">egresos</div></div>
+    <div class="scard gold" id="ds-balance-card"><div class="sc-label">Balance del mes</div><div class="sc-val" id="ds-balance">$0</div><div class="sc-detail">ganancia neta</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="tcard">
+      <div class="tcard-header"><div class="tcard-title">⏰ Próximos vencimientos</div></div>
+      <div class="venc-list" id="dash-venc"><div class="empty"><div class="empty-icon">✅</div>Sin vencimientos próximos</div></div>
+    </div>
+    <div>
+      <div class="tcard" style="margin-bottom:16px">
+        <div class="tcard-header"><div class="tcard-title">💳 Pendientes judiciales por cliente</div></div>
+        <div style="padding:8px 18px 12px" id="dash-pend"><div class="empty"><div class="empty-icon">✅</div>Sin pendientes</div></div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-header"><div class="tcard-title">📝 Pendientes extrajudiciales por cliente</div></div>
+        <div style="padding:8px 18px 12px" id="dash-pend-ext"><div class="empty"><div class="empty-icon">✅</div>Sin pendientes</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPEDIENTES -->
+<div class="page" id="page-expedientes">
+  <div class="ph">
+    <div><div class="ph-title">Expedientes</div><div class="ph-sub">Causas judiciales</div></div>
+    <button class="btn btn-gold" onclick="expEditId=null;document.getElementById('m-exp-title').textContent='Nueva Causa';clr(['e-nro','e-juz','e-notas','e-cli-search','e-porc','e-porc-dem']);document.getElementById('contrapartes-lista').innerHTML='';contrapartesCount=0;openM('m-exp')">＋ Nueva causa</button>
+  </div>
+  <div class="tcard">
+    <div class="tcard-header">
+      <div class="tcard-title" id="exp-count">0 expedientes</div>
+      <div class="search-wrap">🔍<input type="text" placeholder="Buscar..." id="s-exp" oninput="renderExp()"></div>
+    </div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Nº Expediente</th><th>Cliente</th><th>Jurisdicción</th><th>Fuero</th><th>Juzgado</th><th>Estado</th><th>Contrapartes</th><th>Docs</th><th></th></tr></thead>
+      <tbody id="t-exp"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- CLIENTES -->
+<div class="page" id="page-clientes">
+  <div class="ph">
+    <div><div class="ph-title">Clientes</div><div class="ph-sub">Directorio</div></div>
+    <button class="btn btn-gold" onclick="cliEditId=null;document.getElementById('m-cli-title').textContent='Nuevo Cliente';clr(['c-nom','c-dni','c-cuil','c-cuit','c-pasaporte','c-tel','c-tel2','c-email','c-dom','c-dom-legal','c-ocupacion','c-empresa','c-notas']);
+  toggleCamposDoc();openM('m-cli')">＋ Nuevo cliente</button>
+  </div>
+  <div class="tcard">
+    <div class="tcard-header">
+      <div class="tcard-title" id="cli-count">0 clientes</div>
+      <div class="search-wrap">🔍<input type="text" placeholder="Buscar..." id="s-cli" oninput="renderCli()"></div>
+    </div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Nombre</th><th>DNI/CUIT</th><th>Edad / F. Nac.</th><th>Teléfono</th><th>Email</th><th>Causas</th><th></th></tr></thead>
+      <tbody id="t-cli"></tbody></table>
+    </div>
+  </div>
+</div>
+
+
+<!-- PROFESIONALES -->
+<div class="page" id="page-profesionales">
+  <div class="ph">
+    <div><div class="ph-title">Profesionales</div><div class="ph-sub">Peritos, contadores, médicos y colaboradores</div></div>
+    <button class="btn btn-gold" onclick="profEditId=null;clr(['prof-nombre','prof-apellido','prof-tel','prof-email','prof-dom','prof-obs']);openM('m-prof')">＋ Nuevo profesional</button>
+  </div>
+  <div class="tcard">
+    <div class="tcard-header">
+      <div class="tcard-title" id="prof-count">0 profesionales</div>
+      <div class="search-wrap">🔍<input type="text" placeholder="Buscar..." id="s-prof" oninput="renderProfesionales()"></div>
+    </div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Nombre</th><th>Tipo</th><th>Teléfono</th><th>Email</th><th>Disponible</th><th>Observaciones</th><th></th></tr></thead>
+      <tbody id="t-profesionales"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- VENCIMIENTOS -->
+<div class="page" id="page-vencimientos">
+  <div class="ph">
+    <div><div class="ph-title">Vencimientos</div><div class="ph-sub">Plazos y audiencias</div></div>
+    <button class="btn btn-gold" onclick="vencEditId=null;document.getElementById('m-venc-title').textContent='Nuevo Vencimiento';clr(['v-desc']);openM('m-venc')">＋ Nuevo plazo</button>
+  </div>
+
+  <!-- Pendientes -->
+  <div class="tcard">
+    <div class="tcard-header">
+      <div class="tcard-title">⏳ Plazos pendientes</div>
+      <span id="venc-pending-count" style="font-size:12px;color:var(--text-sub)"></span>
+    </div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Fecha</th><th>Tipo</th><th>Descripción</th><th>Expediente</th><th>Prioridad</th><th></th></tr></thead>
+      <tbody id="t-venc"></tbody></table>
+    </div>
+  </div>
+
+  <!-- Historial cumplidos -->
+  <div class="tcard">
+    <div class="tcard-header">
+      <div class="tcard-title">✅ Historial de cumplidos</div>
+      <span id="venc-hist-count" style="font-size:12px;color:var(--text-sub)"></span>
+    </div>
+    <div style="padding:4px 20px 8px" id="hist-venc">
+      <div class="empty"><div class="empty-icon">📋</div>Aún no hay vencimientos cumplidos.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ACTOS JURÍDICOS -->
+<div class="page" id="page-actos">
+  <div class="ph">
+    <div><div class="ph-title">Trabajos Extrajudiciales</div><div class="ph-sub">Trabajos extrajudiciales y asesoramiento</div></div>
+    <button class="btn btn-gold" onclick="actoEditId=null;document.getElementById('m-acto-title').textContent='Nuevo Trabajo Extrajudicial';clr(['a-titulo','a-honorario','a-notas']);const _acl=document.getElementById('acto-contrapartes-lista');if(_acl)_acl.innerHTML='';actoContrapartesCount=0;openM('m-acto')">＋ Nuevo acto</button>
+  </div>
+  <div class="tcard">
+    <div class="tcard-header">
+      <div class="tcard-title" id="acto-count">0 actos</div>
+      <div class="search-wrap">🔍<input type="text" placeholder="Buscar..." id="s-acto" oninput="renderActos()"></div>
+    </div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Fecha</th><th>Cliente</th><th>Tipo</th><th>Descripción</th><th>Estado</th><th>Honorario</th><th>Docs</th><th></th></tr></thead>
+      <tbody id="t-actos"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- FINANZAS -->
+<div class="page" id="page-finanzas">
+  <div class="ph">
+    <div><div class="ph-title">Finanzas</div><div class="ph-sub">Honorarios, pagos, gastos y balance mensual</div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-gold" onclick="openM('m-honorario')">＋ Honorario</button>
+      <button class="btn btn-ghost" onclick="openM('m-pago')">💳 Pago judicial</button>
+      <button class="btn btn-ghost" onclick="openM('m-pago-ext')">📝 Pago extrajudicial</button>
+      <button class="btn btn-ghost" onclick="openM('m-gasto')">＋ Gasto</button>
+      <button class="btn btn-ghost" onclick="exportBalance()" style="border-color:var(--blue);color:var(--blue)">📊 Exportar Excel</button>
+    </div>
+  </div>
+
+  <div class="month-row">
+    <label style="text-transform:none;letter-spacing:0;font-size:13px;color:var(--text-sub)">Período:</label>
+    <select id="fin-mes" onchange="renderFin()"></select>
+  </div>
+
+  <!-- Balance cards -->
+  <div class="fin-grid">
+    <div class="fin-card ingreso"><div class="fin-label">Cobrado — Judicial</div><div class="fin-val" id="f-ingreso">$0</div></div>
+    <div class="fin-card ingreso" style="border-color:var(--blue)"><div class="fin-label">Cobrado — Extrajudicial</div><div class="fin-val" style="color:var(--blue)" id="f-ingreso-ext">$0</div></div>
+    <div class="fin-card ingreso" style="opacity:.9"><div class="fin-label">Total cobrado</div><div class="fin-val" style="color:var(--green)" id="f-ingreso-total">$0</div></div>
+  </div>
+  <div class="fin-grid">
+    <div class="fin-card gasto"><div class="fin-label">Gastos del período</div><div class="fin-val" id="f-gasto">$0</div></div>
+    <div class="fin-card bal-pos" id="f-bal-card"><div class="fin-label">Ganancia neta (balance)</div><div class="fin-val" id="f-balance">$0</div></div>
+    <div class="fin-card pendiente"><div class="fin-label">Total pendiente de cobro</div><div class="fin-val" id="f-pend">$0</div></div>
+  </div>
+  <div class="fin-grid">
+    <div class="fin-card" style="background:var(--surface2)"><div class="fin-label">Facturado judicial (mes)</div><div class="fin-val" style="color:var(--text)" id="f-total">$0</div></div>
+    <div class="fin-card" style="background:var(--surface2)"><div class="fin-label">Facturado extrajudicial (mes)</div><div class="fin-val" style="color:var(--blue)" id="f-total-ext">$0</div></div>
+    <div class="fin-card" style="background:var(--surface2)"><div class="fin-label">Total facturado (mes)</div><div class="fin-val" style="color:var(--gold)" id="f-total-global">$0</div></div>
+  </div>
+
+  <!-- Pendientes por cliente — TABLA DETALLADA -->
+  <div class="tcard">
+    <div class="tcard-header"><div class="tcard-title">💳 Honorarios pendientes por cliente</div></div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Cliente</th><th>Honorario</th><th>Honorarios a percibir</th><th>Pagado</th><th>Saldo pendiente</th><th></th></tr></thead>
+        <tbody id="t-pend-cli"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <!-- Honorarios -->
+    <div class="tcard">
+      <div class="tcard-header"><div class="tcard-title">📋 Honorarios a percibir</div></div>
+      <div style="overflow-x:auto">
+        <table><thead><tr><th>Fecha</th><th>Cliente</th><th>Concepto</th><th>Monto</th><th>Saldo</th><th></th></tr></thead>
+        <tbody id="t-honorarios"></tbody></table>
+      </div>
+    </div>
+    <!-- Gastos -->
+    <div class="tcard">
+      <div class="tcard-header"><div class="tcard-title">📉 Gastos</div></div>
+      <div style="overflow-x:auto">
+        <table><thead><tr><th>Fecha</th><th>Categoría</th><th>Descripción</th><th>Monto</th><th></th></tr></thead>
+        <tbody id="t-gastos"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagos recibidos -->
+  <div class="tcard">
+    <div class="tcard-header"><div class="tcard-title">✅ Pagos recibidos — Judicial</div></div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Fecha</th><th>Cliente</th><th>Honorario</th><th>Medio de pago</th><th>Referencia</th><th>Monto</th><th></th></tr></thead>
+      <tbody id="t-pagos"></tbody></table>
+    </div>
+  </div>
+
+  <!-- Trabajos Extrajudiciales del período -->
+  <div class="tcard">
+    <div class="tcard-header"><div class="tcard-title">📝 Trabajos Extrajudiciales del período</div></div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Fecha</th><th>Cliente</th><th>Tipo</th><th>Descripción</th><th>Honorarios a percibir</th><th>Pagado</th><th>Saldo</th></tr></thead>
+      <tbody id="t-actos-fin"></tbody></table>
+    </div>
+  </div>
+
+  <!-- Pagos extrajudiciales recibidos -->
+  <div class="tcard">
+    <div class="tcard-header"><div class="tcard-title">✅ Pagos recibidos — Extrajudicial</div></div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Fecha</th><th>Cliente</th><th>Trabajo</th><th>Medio de pago</th><th>Referencia</th><th>Monto</th><th></th></tr></thead>
+      <tbody id="t-pagos-ext"></tbody></table>
+    </div>
+  </div>
+
+  <!-- Pendientes extrajudiciales por cliente -->
+  <div class="tcard">
+    <div class="tcard-header"><div class="tcard-title">💳 Trabajos extrajudiciales pendientes de cobro</div></div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Cliente</th><th>Honorarios a percibir</th><th>Cobrado</th><th>Saldo pendiente</th><th></th></tr></thead>
+      <tbody id="t-pend-ext"></tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- AGENDA -->
+<div class="page" id="page-agenda">
+  <div class="ph">
+    <div><div class="ph-title">Agenda</div><div class="ph-sub" id="cal-label"></div></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost btn-sm" onclick="changeMonth(-1)">◀</button>
+      <button class="btn btn-ghost btn-sm" onclick="changeMonth(1)">▶</button>
+    </div>
+  </div>
+
+  <!-- Alertas del día -->
+  <div id="agenda-alertas" style="margin-bottom:16px"></div>
+
+  <div class="tcard">
+    <div class="cal-grid-wrap">
+      <div class="cal-days-hdr" id="cal-dh"></div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+  </div>
+
+  <!-- Lista del mes -->
+  <div class="tcard" style="margin-top:20px">
+    <div class="tcard-header"><div class="tcard-title">📋 Vencimientos del mes</div><span id="cal-mes-count" style="font-size:12px;color:var(--text-sub)"></span></div>
+    <div style="overflow-x:auto">
+      <table><thead><tr><th>Fecha</th><th>Descripción</th><th>Tipo</th><th>Expediente</th><th>Prioridad</th><th>Estado</th></tr></thead>
+      <tbody id="t-cal-lista"></tbody></table>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<!-- ═══ MODALES ═══ -->
+
+
+<!-- Modal Profesional -->
+<div class="modal-wrap" id="m-prof">
+  <div class="modal">
+    <div class="modal-title" id="m-prof-title">Nuevo Profesional</div>
+    <div class="form-grid">
+      <div class="fg"><label>Nombre</label><input id="prof-nombre" placeholder="Nombre"></div>
+      <div class="fg"><label>Apellido</label><input id="prof-apellido" placeholder="Apellido"></div>
+      <div class="fg"><label>Tipo</label>
+        <select id="prof-tipo">
+          <option value="Perito">⚖️ Perito</option>
+          <option value="Contador">📊 Contador</option>
+          <option value="Médico">🩺 Médico</option>
+          <option value="Abogado colaborador">👔 Abogado colaborador</option>
+          <option value="Traductor">🌐 Traductor</option>
+          <option value="Otros">📋 Otros</option>
+        </select>
+      </div>
+      <div class="fg"><label>Especialidad</label><input id="prof-especialidad" placeholder="Ej: Médico laboral, Contador forense..."></div>
+      <div class="fg"><label>Teléfono</label><input id="prof-tel" placeholder="11 4567-8901"></div>
+      <div class="fg"><label>Email</label><input type="email" id="prof-email" placeholder="profesional@email.com"></div>
+      <div class="fg full"><label>Domicilio</label><input id="prof-dom" placeholder="Av. Corrientes 1234, CABA"></div>
+      <div class="fg"><label>Disponible</label>
+        <select id="prof-disponible">
+          <option value="Sí">✅ Sí</option>
+          <option value="No">❌ No</option>
+        </select>
+      </div>
+      <div class="fg"><label>Matrícula / Registro</label><input id="prof-matricula" placeholder="Nº matrícula o registro"></div>
+      <div class="fg full"><label>Observaciones</label><textarea id="prof-obs" placeholder="Notas adicionales..."></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeM('m-prof');profEditId=null">Cancelar</button>
+      <button class="btn btn-gold" onclick="saveProfesional()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Expediente -->
+<div class="modal-wrap" id="m-exp">
+  <div class="modal">
+    <div class="modal-title" id="m-exp-title">Nueva Causa</div>
+    <div class="form-grid">
+      <div class="fg"><label>Nº Expediente</label><input id="e-nro" placeholder="Ej: 12345/2025"></div>
+      <div class="fg"><label>Estado</label><select id="e-estado">
+        <option value="Activo">🟢 Activo</option>
+        <option value="Pendiente">🟡 Pendiente</option>
+        <option value="Culminado">✅ Culminado</option>
+        <option value="Archivado">📦 Archivado</option>
+        <option value="Cerrado">🔴 Cerrado</option>
+      </select></div>
+      <div class="fg"><label>Jurisdicción</label>
+        <select id="e-jurisdiccion">
+          <option value="Capital Federal">🏛 Capital Federal</option>
+          <option value="Provincia de Buenos Aires">🗺 Provincia de Buenos Aires</option>
+          <option value="Otra provincia">📍 Otra provincia</option>
+        </select>
+      </div>
+      <div class="fg"><label>Fuero</label><select id="e-fuero"><option>Civil</option><option>Penal</option><option>Laboral</option><option>Familia</option><option>Contencioso Adm.</option><option>Comercial</option><option>Otro</option></select></div>
+      <div class="fg full"><label>Juzgado / Tribunal</label><input id="e-juz" placeholder="Juzgado Civil Nº 3 - CABA"></div>
+      <div class="fg"><label>Mi rol en la causa</label>
+        <select id="e-rol">
+          <option value="Parte actora">⚔️ Parte actora (demandante)</option>
+          <option value="Parte demandada">🛡 Parte demandada</option>
+          <option value="Tercero citado">📋 Tercero citado</option>
+          <option value="Querellante">⚖️ Querellante</option>
+          <option value="Defensa penal">🔒 Defensa penal</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+
+      <div style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);font-weight:700;margin-bottom:10px">👤 Cliente</div>
+      </div>
+      <div class="fg full">
+        <label>Buscar cliente existente</label>
+        <input id="e-cli-search" placeholder="Ingresá DNI, CUIL o nombre para buscar..." oninput="buscarCliente(this.value,'e-cli-result','e-cli')" autocomplete="off">
+        <div id="e-cli-result" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;display:none;max-height:150px;overflow-y:auto;margin-top:4px"></div>
+        <select id="e-cli" style="margin-top:6px"><option value="">— O seleccioná de la lista —</option></select>
+        <div id="e-cli-nuevo-link" style="font-size:12px;color:var(--gold);cursor:pointer;margin-top:4px;display:none" onclick="abrirNuevoClienteDesdeExp()">＋ Este cliente no existe. Crearlo ahora</div>
+      </div>
+
+      <div style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);font-weight:700;margin-bottom:10px">⚔️ Contraparte</div>
+        <div id="contrapartes-lista"></div>
+        <button type="button" class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="agregarContraparte()">＋ Agregar contraparte</button>
+      </div>
+
+      <div style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);font-weight:700;margin-bottom:10px">💰 Honorarios pactados</div>
+      </div>
+      <div class="fg"><label>Monto de honorarios ($)</label>
+        <input type="number" id="e-hon-monto" placeholder="0">
+        <div style="font-size:11px;color:var(--text-sub);margin-top:3px">Se registra automáticamente en Finanzas</div>
+      </div>
+      <div class="fg"><label>Concepto del honorario</label>
+        <input id="e-hon-conc" placeholder="Ej: Honorarios por demanda laboral">
+      </div>
+      <div class="fg"><label>% Parte actora (quien defiendo)</label>
+        <input type="number" id="e-porc" placeholder="Ej: 15" min="0" max="100" step="0.5">
+        <div style="font-size:11px;color:var(--text-sub);margin-top:3px">% acordado con mi cliente</div>
+      </div>
+      <div class="fg"><label>Base de cálculo — Actora</label>
+        <select id="e-porc-base">
+          <option value="Monto demanda">Monto de la demanda</option>
+          <option value="Monto sentencia">Monto de la sentencia</option>
+          <option value="Acuerdo fijo">Honorario fijo acordado</option>
+          <option value="A determinar">A determinar</option>
+        </select>
+      </div>
+      <div class="fg"><label>% Parte demandada (contraparte)</label>
+        <input type="number" id="e-porc-dem" placeholder="Ej: 10" min="0" max="100" step="0.5">
+        <div style="font-size:11px;color:var(--text-sub);margin-top:3px">% a cobrar a la contraparte</div>
+      </div>
+      <div class="fg"><label>Base de cálculo — Demandada</label>
+        <select id="e-porc-dem-base">
+          <option value="Monto sentencia">Monto de la sentencia</option>
+          <option value="Monto demanda">Monto de la demanda</option>
+          <option value="Acuerdo fijo">Honorario fijo acordado</option>
+          <option value="A determinar">A determinar</option>
+        </select>
+      </div>
+      <div class="fg full"><label>Notas / Objeto de la causa</label><textarea id="e-notas" placeholder="Descripción de la causa..."></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeM('m-exp');expEditId=null">Cancelar</button>
+      <button class="btn btn-gold" onclick="saveExp()">Guardar causa</button>
+    </div>
+  </div>
+</div>
+
+<!-- Cliente -->
+<div class="modal-wrap" id="m-cli">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-title" id="m-cli-title">Nuevo Cliente</div>
+
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:10px;font-weight:700">Datos personales</div>
+    <div class="form-grid">
+      <div class="fg full"><label>Nombre completo / Razón social</label><input id="c-nom" placeholder="Juan García"></div>
+      <div class="fg">
+        <label>Fecha de nacimiento</label>
+        <input type="date" id="c-fnac" oninput="actualizarEdad()">
+        <div id="c-edad-display" style="font-size:12px;color:var(--gold);font-weight:700;margin-top:4px;min-height:18px"></div>
+      </div>
+      <div class="fg"><label>Nacionalidad</label>
+        <select id="c-nac">
+          <option value="">Seleccionar...</option>
+          <option>Argentina</option><option>Uruguaya</option><option>Brasileña</option>
+          <option>Chilena</option><option>Paraguaya</option><option>Boliviana</option>
+          <option>Peruana</option><option>Colombiana</option><option>Venezolana</option>
+          <option>Española</option><option>Italiana</option><option>Otra</option>
+        </select>
+      </div>
+      <div class="fg"><label>Estado civil</label>
+        <select id="c-ecivil">
+          <option value="">Seleccionar...</option>
+          <option>Soltero/a</option><option>Casado/a</option><option>Divorciado/a</option>
+          <option>Viudo/a</option><option>Unión convivencial</option>
+        </select>
+      </div>
+      <div class="fg"><label>Género</label>
+        <select id="c-genero">
+          <option value="">Seleccionar...</option>
+          <option>Masculino</option><option>Femenino</option><option>No binario</option><option>Prefiero no indicar</option>
+        </select>
+      </div>
+      <div class="fg full">
+        <label>Tipo de persona</label>
+        <select id="c-tipo-persona" onchange="toggleCamposDoc()">
+          <option value="Fisica">👤 Persona física</option>
+          <option value="Juridica">🏢 Persona jurídica</option>
+        </select>
+      </div>
+      <!-- Persona física: DNI + CUIL -->
+      <div class="fg" id="campo-dni">
+        <label>DNI</label>
+        <input id="c-dni" placeholder="12.345.678" onblur="checkDuplicateClient(this.value)">
+        <div id="c-dni-alert" style="font-size:12px;color:var(--orange);margin-top:3px;display:none"></div>
+      </div>
+      <div class="fg" id="campo-cuil">
+        <label>CUIL</label>
+        <input id="c-cuil" placeholder="20-12345678-9">
+      </div>
+      <!-- Persona jurídica: solo CUIT -->
+      <div class="fg full" id="campo-cuit" style="display:none">
+        <label>CUIT</label>
+        <input id="c-cuit" placeholder="30-12345678-9" onblur="checkDuplicateClient(this.value)">
+        <div id="c-cuit-alert" style="font-size:12px;color:var(--orange);margin-top:3px;display:none"></div>
+      </div>
+      <div class="fg"><label>Pasaporte (opcional)</label><input id="c-pasaporte" placeholder="AAB123456"></div>
+    </div>
+
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin:16px 0 10px;font-weight:700">Contacto</div>
+    <div class="form-grid">
+      <div class="fg"><label>Teléfono / Celular</label><input id="c-tel" placeholder="11 4567-8901"></div>
+      <div class="fg"><label>Teléfono alternativo</label><input id="c-tel2" placeholder="11 4567-8902"></div>
+      <div class="fg full"><label>Email</label><input type="email" id="c-email" placeholder="cliente@email.com"></div>
+      <div class="fg full"><label>Domicilio real</label><input id="c-dom" placeholder="Av. Corrientes 1234, CABA"></div>
+      <div class="fg full"><label>Domicilio constituido (legal)</label><input id="c-dom-legal" placeholder="Domicilio para notificaciones legales"></div>
+    </div>
+
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin:16px 0 10px;font-weight:700">Datos laborales / adicionales</div>
+    <div class="form-grid">
+      <div class="fg"><label>Ocupación / Profesión</label><input id="c-ocupacion" placeholder="Ej: Comerciante, Empleado..."></div>
+      <div class="fg"><label>Empleador / Empresa</label><input id="c-empresa" placeholder="Nombre de la empresa"></div>
+      <div class="fg full"><label>Cómo llegó al estudio</label>
+        <select id="c-origen">
+          <option value="">Seleccionar...</option>
+          <option>Referido por otro cliente</option><option>Búsqueda en internet</option>
+          <option>Redes sociales</option><option>Conocido personal</option><option>Otro</option>
+        </select>
+      </div>
+      <div class="fg full"><label>Notas / Observaciones</label><textarea id="c-notas" placeholder="Información adicional relevante del cliente..."></textarea></div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeM('m-cli');cliEditId=null">Cancelar</button>
+      <button class="btn btn-gold" onclick="saveCli()">Guardar cliente</button>
+    </div>
+  </div>
+</div>
+
+<!-- Vencimiento -->
+<div class="modal-wrap" id="m-venc">
+  <div class="modal">
+    <div class="modal-title" id="m-venc-title">Nuevo Vencimiento</div>
+    <div class="form-grid">
+      <div class="fg"><label>Fecha</label><input type="date" id="v-fecha"></div>
+      <div class="fg"><label>Tipo</label><select id="v-tipo"><option>Plazo procesal</option><option>Audiencia</option><option>Pericia</option><option>Presentación de escrito</option><option>Otro</option></select></div>
+      <div class="fg full"><label>Descripción</label><input id="v-desc" placeholder="Ej: Contestar demanda, Audiencia de conciliación..."></div>
+      <div class="fg"><label>Expediente</label><select id="v-exp"><option value="">Sin expediente</option></select></div>
+      <div class="fg"><label>Prioridad</label><select id="v-prior"><option value="Alta">🔴 Alta</option><option value="Media">🟡 Media</option><option value="Normal">🔵 Normal</option></select></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeM('m-venc');vencEditId=null">Cancelar</button>
+      <button class="btn btn-gold" onclick="saveVenc()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Honorario -->
+<div class="modal-wrap" id="m-honorario">
+  <div class="modal">
+    <div class="modal-title">Nuevo Honorario</div>
+    <div class="form-grid">
+      <div class="fg"><label>Fecha</label><input type="date" id="h-fecha"></div>
+      <div class="fg"><label>Cliente</label><select id="h-cli"><option value="">Seleccionar...</option></select></div>
+      <div class="fg"><label>Expediente (opcional)</label><select id="h-exp"><option value="">Sin expediente</option></select></div>
+      <div class="fg"><label>Honorarios a percibir ($)</label><input type="number" id="h-monto" placeholder="0"></div>
+      <div class="fg full"><label>Concepto</label><input id="h-conc" placeholder="Ej: Honorarios por contestación de demanda"></div>
+    </div>
+    <p style="font-size:11.5px;color:var(--text-sub);margin-top:12px">💡 El honorario queda como <b>pendiente</b>. Cuando el cliente pague, usá "Registrar pago" para descontarlo.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeM('m-honorario')">Cancelar</button>
+      <button class="btn btn-gold" onclick="saveHonorario()">Guardar honorario</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pago -->
+<div class="modal-wrap" id="m-pago">
+  <div class="modal">
+    <div class="modal-title">Registrar Pago</div>
+    <div class="form-grid">
+      <div class="fg"><label>Fecha del pago</label><input type="date" id="p-fecha"></div>
+      <div class="fg"><label>Cliente</label><select id="p-cli" onchange="populateHonorariosCliente()"><option value="">Seleccionar...</option></select></div>
+      <div class="fg full"><label>Honorario a pagar</label><select id="p-hon"><option value="">Seleccionar honorario pendiente...</option></select></div>
+      <div class="fg"><label>Monto pagado ($)</label><input type="number" id="p-monto" placeholder="0"></div>
+      <div class="fg"><label>Medio de pago</label>
+        <select id="p-medio">
+          <option value="Transferencia bancaria">🏦 Transferencia bancaria</option>
+          <option value="Efectivo">💵 Efectivo</option>
+          <option value="Cheque">📝 Cheque</option>
+          <option value="Depósito bancario">🏧 Depósito bancario</option>
+          <option value="Tarjeta de crédito">💳 Tarjeta de crédito</option>
+          <option value="Tarjeta de débito">💳 Tarjeta de débito</option>
+          <option value="MercadoPago">📱 MercadoPago</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div class="fg full"><label>Nº Comprobante / Referencia (opcional)</label><input id="p-ref" placeholder="Ej: CBU, nº cheque, nº transferencia..."></div>
+      <div class="fg full"><label>Notas adicionales (opcional)</label><input id="p-notas" placeholder="Observaciones..."></div>
+    </div>
+    <div id="p-saldo-info" style="margin-top:12px;font-size:12px;color:var(--text-sub)"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeM('m-pago')">Cancelar</button>
+      <button class="btn btn-gold" onclick="savePago()">Registrar pago</button>
+    </div>
+  </div>
+</div>
+
+<!-- Gasto -->
+<div class="modal-wrap" id="m-gasto">
+  <div class="modal">
+    <div class="modal-title">Registrar Gasto</div>
+    <div class="form-grid">
+      <div class="fg"><label>Fecha</label><input type="date" id="g-fecha"></div>
+      <div class="fg"><label>Categoría</label><select id="g-cat">
+        <option>Alquiler oficina</option><option>Servicios (luz, internet)</option>
+        <option>Tasa de justicia</option><option>Honorarios perito</option>
+        <option>Papelería / Insumos</option><option>Transporte</option>
+        <option>Contabilidad / AFIP</option><option>Software / Suscripciones</option>
+        <option>Otros gastos</option>
+      </select></div>
+      <div class="fg full"><label>Descripción</label><input id="g-desc" placeholder="Descripción del gasto..."></div>
+      <div class="fg"><label>Monto ($)</label><input type="number" id="g-monto" placeholder="0"></div>
+      <div class="fg"><label>Expediente (opcional)</label><select id="g-exp"><option value="">Sin expediente</option></select></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeM('m-gasto')">Cancelar</button>
+      <button class="btn btn-gold" onclick="saveGasto()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ── SUPABASE ──
+const SUPA_URL = 'https://ggcomxofltwuuobamolx.supabase.co';
+const SUPA_KEY = 'sb_publishable_knPq6RaUpDgENC6FVV94eQ_dnOzHwpp';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// ── AUTH ──
+async function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  const errEl=document.getElementById('login-err');
+  const btn=document.querySelector('.login-btn');
+  errEl.textContent='';
+  btn.textContent='Ingresando...';btn.disabled=true;
+  try{
+    const {data,error}=await supa.auth.signInWithPassword({email,password:pass});
+    if(error) throw error;
+    showApp();
+  } catch(e){
+    errEl.textContent='Email o contraseña incorrectos. Intente nuevamente.';
+    btn.textContent='Ingresar al sistema';btn.disabled=false;
+  }
+}
+
+async function doLogout(){
+  if(!confirm('¿Cerrar sesión?'))return;
+  await supa.auth.signOut();
+  document.getElementById('main-app').style.display='none';
+  document.getElementById('login-screen').classList.add('visible');
+  document.getElementById('login-pass').value='';
+}
+
+function showApp(){
+  const ls=document.getElementById('login-screen');
+  if(ls) ls.style.display='none';
+  const app=document.getElementById('main-app');
+  if(app) app.style.display='flex';
+  load().then(()=>{ renderAll(); });
+}
+
+// Verificar si ya hay sesión activa al cargar
+async function checkSession(){
+  const {data:{session}}=await supa.auth.getSession();
+  if(session){
+    showApp();
+  }
+  // Si no hay sesión, la pantalla de login ya está visible
+}
+
+const DOC_ID = 'estudio-palmiero'; // ID único del documento en la base de datos
+
+// ── STATE ──
+let S={expedientes:[],clientes:[],vencimientos:[],honorarios:[],pagos:[],gastos:[],actos:[],pagosExt:[],profesionales:[]};
+let _saveTimer=null;
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+
+// Mostrar indicador de sincronización
+function showSync(msg,color){
+  let el=document.getElementById('sync-indicator');
+  if(!el){el=document.createElement('div');el.id='sync-indicator';el.style.cssText='position:fixed;bottom:16px;right:16px;z-index:9999;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;font-family:Nunito,sans-serif;box-shadow:0 2px 12px rgba(0,0,0,.15);transition:opacity .4s';document.body.appendChild(el);}
+  el.textContent=msg;
+  el.style.background=color==='ok'?'#1e8a4a':color==='err'?'#c0392b':'#b8860b';
+  el.style.color='#fff';
+  el.style.opacity='1';
+  if(color==='ok') setTimeout(()=>{el.style.opacity='0';},2000);
+}
+
+// Garantizar que todos los arrays existan
+function ensureArrays(){
+  S.expedientes=S.expedientes||[];
+  S.clientes=S.clientes||[];
+  S.vencimientos=S.vencimientos||[];
+  S.honorarios=S.honorarios||[];
+  S.pagos=S.pagos||[];
+  S.gastos=S.gastos||[];
+  S.actos=S.actos||[];
+  S.pagosExt=S.pagosExt||[];
+  S.profesionales=S.profesionales||[];
+  // SIEMPRE recalcular saldo de honorarios judiciales desde pagos reales
+  S.honorarios.forEach(h=>{
+    const pagado=S.pagos.filter(p=>p.honorarioId===h.id).reduce((s,p)=>s+p.monto,0);
+    h.saldo=Math.max(0,(h.monto||0)-pagado);
+  });
+  // SIEMPRE recalcular saldo de actos extrajudiciales desde pagosExt reales
+  S.actos.forEach(a=>{
+    if(a.honorario>0){
+      const pagado=S.pagosExt.filter(p=>p.actoId===a.id).reduce((s,p)=>s+p.monto,0);
+      a.saldo=Math.max(0,(a.honorario||0)-pagado);
+    } else {
+      a.saldo=0;
+    }
+  });
+}
+
+// Cargar datos desde Supabase
+async function load(){
+  try {
+    showSync('⏳ Cargando datos...','sync');
+    const {data,error}=await supa.from('estudio_data').select('*').eq('doc_id',DOC_ID).single();
+    if(error&&error.code==='PGRST116'){
+      await supa.from('estudio_data').insert({doc_id:DOC_ID,data:JSON.stringify(S)});
+      showSync('✓ Listo','ok');
+    } else if(error){
+      throw error;
+    } else if(data){
+      S=JSON.parse(data.data);
+      ensureArrays();
+      showSync('✓ Sincronizado','ok');
+    }
+  } catch(e){
+    console.warn('Supabase error, usando localStorage:',e);
+    const d=localStorage.getItem('ej4');
+    if(d){ S=JSON.parse(d); ensureArrays(); }
+    showSync('⚠ Sin conexión — datos locales','err');
+  }
+}
+
+// Guardar datos en Supabase (con debounce 800ms)
+function save(){
+  localStorage.setItem('ej4',JSON.stringify(S)); // backup local siempre
+  if(_saveTimer) clearTimeout(_saveTimer);
+  _saveTimer=setTimeout(async()=>{
+    try{
+      showSync('💾 Guardando...','sync');
+      const {error}=await supa.from('estudio_data').upsert({doc_id:DOC_ID,data:JSON.stringify(S),updated_at:new Date().toISOString()});
+      if(error) throw error;
+      showSync('✓ Guardado','ok');
+    } catch(e){
+      console.warn('Error guardando:',e);
+      showSync('⚠ Error al guardar','err');
+    }
+  },800);
+}
+
+// ── NAV ──
+function goTo(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  if(id==='agenda'){renderCal();renderAgendaAlertas();}
+  if(id==='profesionales')renderProfesionales();
+  if(id==='finanzas')renderFin();
+  closeSB();
+}
+function toggleSB(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open');}
+function closeSB(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
+
+// ── MODAL ──
+function openM(id){
+  try{populateSels();}catch(e){}
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.classList.add('open');
+  const t=new Date().toISOString().split('T')[0];
+  el.querySelectorAll('input[type=date]').forEach(i=>{if(!i.value)i.value=t;});
+}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-wrap').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+function populateSels(){
+  ['e-cli','h-cli','p-cli','a-cli','pe-cli'].forEach(id=>{const s=document.getElementById(id);if(!s)return;const v=s.value;s.innerHTML='<option value="">Seleccionar...</option>';S.clientes.forEach(c=>s.innerHTML+=`<option value="${c.id}">${c.nombre}</option>`);s.value=v;});
+  ['v-exp','h-exp','g-exp'].forEach(id=>{const s=document.getElementById(id);if(!s)return;s.innerHTML='<option value="">Sin expediente</option>';S.expedientes.forEach(e=>s.innerHTML+=`<option value="${e.id}">${e.nro} – ${cNom(e.clienteId)}</option>`);});
+}
+
+// ── HELPERS ──
+function cNom(id){const c=S.clientes.find(x=>x.id===id);return c?c.nombre:'—';}
+function eNro(id){const e=S.expedientes.find(x=>x.id===id);return e?e.nro:'—';}
+function fmt(f){if(!f)return'—';const[y,m,d]=f.split('-');return`${d}/${m}/${y}`;}
+function days(f){if(!f)return 9999;const h=new Date();h.setHours(0,0,0,0);return Math.ceil((new Date(f+'T00:00:00')-h)/864e5);}
+function $m(n){return'$'+Number(n||0).toLocaleString('es-AR');}
+function ym(f){return f?f.slice(0,7):'';}
+function clr(ids){ids.forEach(id=>{try{const el=document.getElementById(id);if(el){el.value='';if(el.tagName==='SELECT')el.selectedIndex=0;}}catch(e){}});}
+
+// ── EXPEDIENTES ──
+// ── EXPEDIENTES ──
+let expEditId=null;
+
+function delExp(id){
+  const e=S.expedientes.find(x=>x.id===id);
+  if(!e)return;
+  const venc=S.vencimientos.filter(v=>v.expId===id).length;
+  const hon=S.honorarios.filter(h=>h.expId===id).length;
+  let msg=`¿Eliminar el expediente "${e.nro}"?`;
+  if(venc>0) msg+=`\n⚠ Tiene ${venc} vencimiento${venc!==1?'s':''} asociado${venc!==1?'s':''}.`;
+  if(hon>0) msg+=`\n⚠ Tiene ${hon} honorario${hon!==1?'s':''} asociado${hon!==1?'s':''}.`;
+  msg+='\n\nEsta acción no se puede deshacer.';
+  if(!confirm(msg))return;
+  S.expedientes=S.expedientes.filter(x=>x.id!==id);
+  save();renderAll();
+}
+
+function editExp(id){
+  const e=S.expedientes.find(x=>x.id===id);
+  if(!e)return;
+  expEditId=id;
+  populateSels();
+  document.getElementById('m-exp-title').textContent='Editar Causa';
+  document.getElementById('e-nro').value=e.nro||'';
+  document.getElementById('e-cli').value=e.clienteId||'';
+  document.getElementById('e-jurisdiccion').value=e.jurisdiccion||'Capital Federal';
+  document.getElementById('e-fuero').value=e.fuero||'Civil';
+  document.getElementById('e-estado').value=e.estado||'Activo';
+  document.getElementById('e-juz').value=e.juzgado||'';
+  document.getElementById('e-notas').value=e.notas||'';
+  // Load search field with client name
+  const _erol=document.getElementById('e-rol');if(_erol)_erol.value=e.rol||'Parte actora';
+  // Cargar honorario vinculado
+  const _ehm=document.getElementById('e-hon-monto');
+  const _ehc=document.getElementById('e-hon-conc');
+  if(e.honorarioId){
+    const h=S.honorarios.find(x=>x.id===e.honorarioId);
+    if(h){if(_ehm)_ehm.value=h.monto||'';if(_ehc)_ehc.value=h.concepto||'';}
+  } else {
+    if(_ehm)_ehm.value=e.honMonto||'';
+    if(_ehc)_ehc.value=e.honConc||'';
+  }
+  const _ep=document.getElementById('e-porc');if(_ep)_ep.value=e.porcentaje||'';
+  const _epb=document.getElementById('e-porc-base');if(_epb)_epb.value=e.porcBase||'Monto demanda';
+  const _epd=document.getElementById('e-porc-dem');if(_epd)_epd.value=e.porcDem||'';
+  const _epdb=document.getElementById('e-porc-dem-base');if(_epdb)_epdb.value=e.porcDemBase||'Monto sentencia';
+  const eCli=S.clientes.find(x=>x.id===e.clienteId);
+  const searchEl=document.getElementById('e-cli-search');
+  if(searchEl&&eCli) searchEl.value=eCli.nombre+' ('+(eCli.dni||'Sin DNI')+')';
+  // Load contrapartes
+  renderContrapartes(e.contrapartes||[]);
+  document.getElementById('m-exp').classList.add('open');
+}
+
+function saveExp(){
+  const nro=document.getElementById('e-nro').value.trim();
+  if(!nro){alert('Ingresá el número de expediente.');return;}
+  const honMonto=parseFloat(document.getElementById('e-hon-monto').value)||0;
+  const honConc=document.getElementById('e-hon-conc').value.trim();
+  const cliId=document.getElementById('e-cli').value;
+  const datos={
+    nro,
+    clienteId:cliId,
+    rol:document.getElementById('e-rol').value,
+    jurisdiccion:document.getElementById('e-jurisdiccion').value,
+    fuero:document.getElementById('e-fuero').value,
+    estado:document.getElementById('e-estado').value,
+    juzgado:document.getElementById('e-juz').value,
+    contrapartes:getContrapartes(),
+    porcentaje:document.getElementById('e-porc').value,
+    porcBase:document.getElementById('e-porc-base').value,
+    porcDem:document.getElementById('e-porc-dem').value,
+    porcDemBase:document.getElementById('e-porc-dem-base').value,
+    notas:document.getElementById('e-notas').value,
+    honMonto,
+    honConc
+  };
+
+  let expId;
+  if(expEditId){
+    const idx=S.expedientes.findIndex(x=>x.id===expEditId);
+    if(idx>=0){
+      // Si cambió el monto, actualizar el honorario vinculado
+      const old=S.expedientes[idx];
+      if(honMonto>0 && old.honorarioId){
+        const h=S.honorarios.find(x=>x.id===old.honorarioId);
+        if(h){h.monto=honMonto;h.concepto=honConc||`Expediente ${nro}`;}
+      } else if(honMonto>0 && !old.honorarioId){
+        // Nuevo honorario para expediente editado
+        const newHon={id:uid(),fecha:new Date().toISOString().split('T')[0],clienteId:cliId,concepto:honConc||`Expediente ${nro}`,monto:honMonto,saldo:honMonto,expId:expEditId};
+        S.honorarios.push(newHon);
+        datos.honorarioId=newHon.id;
+      }
+      S.expedientes[idx]={...old,...datos};
+    }
+    expId=expEditId;
+    expEditId=null;
+  } else {
+    expId=uid();
+    const newExp={id:expId,fecha:new Date().toISOString().split('T')[0],...datos};
+    // Auto-crear honorario si hay monto
+    if(honMonto>0){
+      const newHon={id:uid(),fecha:new Date().toISOString().split('T')[0],clienteId:cliId,concepto:honConc||`Expediente ${nro}`,monto:honMonto,saldo:honMonto,expId};
+      S.honorarios.push(newHon);
+      newExp.honorarioId=newHon.id;
+    }
+    S.expedientes.push(newExp);
+  }
+  save();
+  closeM('m-exp');
+  document.getElementById('m-exp-title').textContent='Nueva Causa';
+  clr(['e-nro','e-juz','e-notas','e-cli-search','e-porc','e-porc-dem','e-hon-monto','e-hon-conc']);
+  document.getElementById('contrapartes-lista').innerHTML='';contrapartesCount=0;
+  renderAll();
+}
+
+function renderExp(){
+  const q=(document.getElementById('s-exp')?.value||'').toLowerCase();
+  const rows=S.expedientes.filter(e=>e.nro.toLowerCase().includes(q)||cNom(e.clienteId).toLowerCase().includes(q)||(e.juzgado||'').toLowerCase().includes(q));
+  document.getElementById('exp-count').textContent=rows.length+' expediente'+(rows.length!==1?'s':'');
+  const tb=document.getElementById('t-exp');
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="8"><div class="empty"><div class="empty-icon">📁</div>Sin expedientes.</div></td></tr>`;return;}
+  const fc={Civil:'civil',Penal:'penal',Laboral:'laboral',Familia:'familia'};
+  const etag={
+    Activo:'<span class="tag tag-active">🟢 Activo</span>',
+    Pendiente:'<span class="tag tag-pending">🟡 Pendiente</span>',
+    Culminado:'<span class="tag" style="background:var(--blue-dim);color:var(--blue)">✅ Culminado</span>',
+    Archivado:'<span class="tag tag-closed">📦 Archivado</span>',
+    Cerrado:'<span class="tag tag-closed">🔴 Cerrado</span>',
+  };
+  let html='';
+  rows.forEach(e=>{
+
+    const docs=e.docs||[];
+    const ndocs=docs.length;
+    html+=`<tr>
+      <td data-label="Expediente">
+        <div class="td-main">${e.nro}</div>
+        ${e.honorarioId?`<div class="td-sub" style="color:var(--green)">💰 Hon: ${$m(S.honorarios.find(h=>h.id===e.honorarioId)?.monto||0)}</div>`:''}
+        ${e.porcentaje?`<div class="td-sub" style="color:var(--gold)">⚖️ Actora: ${e.porcentaje}%</div>`:''}
+        ${e.porcDem?`<div class="td-sub" style="color:var(--orange)">⚖️ Demandada: ${e.porcDem}%</div>`:''}
+      </td>
+      <td data-label="Cliente"><div class="td-main">${cNom(e.clienteId)}</div>${e.rol?`<div class="td-sub" style="color:var(--text-sub);font-size:11px">${e.rol}</div>`:''}</td>
+      <td data-label="Fuero"><span class="tag tag-${fc[e.fuero]||'civil'}">${e.fuero}</span></td>
+      <td data-label="Juzgado"><span style="font-size:13px;color:var(--text-sub)">${e.juzgado||'—'}</span></td>
+      <td data-label="Estado">${etag[e.estado]||etag['Activo']}</td>
+      <td data-label="Docs"><button class="btn btn-ghost btn-xs" onclick="toggleDocs('${e.id}')" title="Ver documentos">📎 ${ndocs} doc${ndocs!==1?'s':''}</button></td>
+      <td data-label="">
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-ghost btn-xs" onclick="editExp('${e.id}')" title="Editar">✏️ Editar</button>
+          <button class="btn btn-danger btn-xs" onclick="delExp('${e.id}')" title="Eliminar">🗑</button>
+        </div>
+      </td>
+    </tr>
+    <tr class="exp-row-docs" id="docs-row-${e.id}" style="display:none">
+      <td colspan="8">
+        <div class="doc-panel">
+          <div class="doc-panel-title">📎 Documentos del expediente ${e.nro}</div>
+          <div id="docs-list-${e.id}"></div>
+          <button class="btn btn-gold btn-sm" style="margin-top:10px" onclick="openAddDoc('${e.id}')">＋ Agregar documento</button>
+        </div>
+      </td>
+    </tr>`;
+  });
+  tb.innerHTML=html;
+  // render existing docs
+  rows.forEach(e=>renderDocList(e.id));
+}
+
+function toggleDocs(expId){
+  const row=document.getElementById('docs-row-'+expId);
+  if(!row)return;
+  const visible=row.style.display!=='none';
+  // close all others
+  document.querySelectorAll('[id^="docs-row-"]').forEach(r=>r.style.display='none');
+  if(!visible) row.style.display='table-row';
+}
+
+function renderDocList(expId){
+  const cont=document.getElementById('docs-list-'+expId);
+  if(!cont)return;
+  const e=S.expedientes.find(x=>x.id===expId);
+  if(!e)return;
+  const docs=e.docs||[];
+  if(!docs.length){cont.innerHTML='<div style="font-size:13px;color:var(--text-dim);padding:4px 0 8px">Sin documentos. Agregá el primero.</div>';return;}
+  cont.innerHTML=docs.map(d=>`
+    <div class="doc-item">
+      <div class="doc-icon">📄</div>
+      <div style="flex:1">
+        <div class="doc-name">${d.nombre}</div>
+        <div class="doc-type">${d.tipo}${d.fecha?' · '+fmt(d.fecha):''}</div>
+      </div>
+      <div class="doc-actions">
+        <a href="${d.url}" target="_blank" class="btn btn-gold btn-xs">🔗 Abrir</a>
+        <button class="btn btn-danger btn-xs" onclick="delDoc('${expId}','${d.id}')">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function openAddDoc(expId){
+  document.getElementById('d-expid').value=expId;
+  document.getElementById('d-nombre').value='';
+  document.getElementById('d-url').value='';
+  document.getElementById('d-fecha').value='';
+  document.getElementById('m-doc').classList.add('open');
+}
+
+function saveDoc(){
+  const rawId=document.getElementById('d-expid').value;
+  const nombre=document.getElementById('d-nombre').value.trim();
+  const url=document.getElementById('d-url').value.trim();
+  if(!nombre){alert('Ingresá el nombre del documento.');return;}
+  if(!url){alert('Pegá el enlace del documento.');return;}
+  const docObj={id:uid(),nombre,tipo:document.getElementById('d-tipo').value,fecha:document.getElementById('d-fecha').value,url};
+
+  if(rawId.startsWith('ACTO:')){
+    const actoId=rawId.replace('ACTO:','');
+    const a=S.actos.find(x=>x.id===actoId);
+    if(!a)return;
+    if(!a.docs)a.docs=[];
+    a.docs.push(docObj);
+    save();closeM('m-doc');
+    renderActoDocList(actoId);renderActos();
+    const row=document.getElementById('acto-docs-row-'+actoId);
+    if(row)row.style.display='table-row';
+  } else {
+    const e=S.expedientes.find(x=>x.id===rawId);
+    if(!e)return;
+    if(!e.docs)e.docs=[];
+    e.docs.push(docObj);
+    save();closeM('m-doc');
+    renderDocList(rawId);renderExp();
+    const row=document.getElementById('docs-row-'+rawId);
+    if(row)row.style.display='table-row';
+  }
+}
+
+function delDoc(expId,docId){
+  if(!confirm('¿Eliminar este documento?'))return;
+  const e=S.expedientes.find(x=>x.id===expId);
+  if(!e||!e.docs)return;
+  e.docs=e.docs.filter(d=>d.id!==docId);
+  save();renderDocList(expId);renderExp();
+  const row=document.getElementById('docs-row-'+expId);
+  if(row)row.style.display='table-row';
+}
+
+// ── CLIENTES ──
+let cliEditId=null;
+
+function editCli(id){
+  const c=S.clientes.find(x=>x.id===id);
+  if(!c)return;
+  cliEditId=id;
+  document.getElementById('m-cli-title').textContent='Editar Cliente';
+  document.getElementById('c-nom').value=c.nombre||'';
+  document.getElementById('c-fnac').value=c.fnac||'';
+  setTimeout(actualizarEdad,50);
+  document.getElementById('c-nac').value=c.nacionalidad||'';
+  document.getElementById('c-ecivil').value=c.estadoCivil||'';
+  document.getElementById('c-genero').value=c.genero||'';
+  document.getElementById('c-tipo-persona').value=c.tipoPersona||'Fisica';
+  toggleCamposDoc();
+  document.getElementById('c-dni').value=c.dni||'';
+  document.getElementById('c-cuil').value=c.cuil||'';
+  document.getElementById('c-cuit').value=c.cuit||'';
+  document.getElementById('c-pasaporte').value=c.pasaporte||'';
+  document.getElementById('c-tel').value=c.tel||'';
+  document.getElementById('c-tel2').value=c.tel2||'';
+  document.getElementById('c-email').value=c.email||'';
+  document.getElementById('c-dom').value=c.domicilio||'';
+  document.getElementById('c-dom-legal').value=c.domicilioLegal||'';
+  document.getElementById('c-ocupacion').value=c.ocupacion||'';
+  document.getElementById('c-empresa').value=c.empresa||'';
+  document.getElementById('c-origen').value=c.origen||'';
+  document.getElementById('c-notas').value=c.notas||'';
+  document.getElementById('m-cli').classList.add('open');
+}
+
+function calcEdad(fnac){
+  if(!fnac)return null;
+  const hoy=new Date();const nac=new Date(fnac+'T00:00:00');
+  let edad=hoy.getFullYear()-nac.getFullYear();
+  const m=hoy.getMonth()-nac.getMonth();
+  if(m<0||(m===0&&hoy.getDate()<nac.getDate()))edad--;
+  return edad;
+}
+
+function actualizarEdad(){
+  const fnac=document.getElementById('c-fnac')?.value;
+  const el=document.getElementById('c-edad-display');
+  if(!el)return;
+  if(!fnac){el.textContent='';return;}
+  const edad=calcEdad(fnac);
+  if(edad===null||edad<0){el.textContent='';return;}
+  // Próximo cumpleaños
+  const hoy=new Date();
+  const nac=new Date(fnac+'T00:00:00');
+  const proxCump=new Date(hoy.getFullYear(),nac.getMonth(),nac.getDate());
+  if(proxCump<hoy) proxCump.setFullYear(hoy.getFullYear()+1);
+  const diasCump=Math.ceil((proxCump-hoy)/864e5);
+  const cumpStr=diasCump===0?' 🎂 ¡Hoy es su cumpleaños!':diasCump<=30?` · Cumple en ${diasCump}d`:'';
+  el.textContent=`${edad} años${cumpStr}`;
+}
+
+function saveCli(){
+  const nom=document.getElementById('c-nom').value.trim();
+  if(!nom){alert('Ingresá el nombre.');return;}
+  const datos={
+    nombre:nom,
+    fnac:document.getElementById('c-fnac').value,
+    nacionalidad:document.getElementById('c-nac').value,
+    estadoCivil:document.getElementById('c-ecivil').value,
+    genero:document.getElementById('c-genero').value,
+    tipoPersona:document.getElementById('c-tipo-persona').value,
+    dni:document.getElementById('c-dni').value,
+    cuil:document.getElementById('c-cuil').value,
+    cuit:document.getElementById('c-cuit').value,
+    pasaporte:document.getElementById('c-pasaporte').value,
+    tel:document.getElementById('c-tel').value,
+    tel2:document.getElementById('c-tel2').value,
+    email:document.getElementById('c-email').value,
+    domicilio:document.getElementById('c-dom').value,
+    domicilioLegal:document.getElementById('c-dom-legal').value,
+    ocupacion:document.getElementById('c-ocupacion').value,
+    empresa:document.getElementById('c-empresa').value,
+    origen:document.getElementById('c-origen').value,
+    notas:document.getElementById('c-notas').value
+  };
+  if(cliEditId){
+    const idx=S.clientes.findIndex(x=>x.id===cliEditId);
+    if(idx>=0) S.clientes[idx]={...S.clientes[idx],...datos};
+    cliEditId=null;
+  } else {
+    S.clientes.push({id:uid(),...datos});
+  }
+  save();
+  closeM('m-cli');
+  document.getElementById('m-cli-title').textContent='Nuevo Cliente';
+  clr(['c-nom','c-dni','c-cuil','c-cuit','c-pasaporte','c-tel','c-tel2','c-email','c-dom','c-dom-legal','c-ocupacion','c-empresa','c-notas']);
+  toggleCamposDoc();
+  renderAll();
+}
+
+function delCli(id){
+  const c=S.clientes.find(x=>x.id===id);
+  if(!c)return;
+  const causas=S.expedientes.filter(e=>e.clienteId===id).length;
+  const pend=S.honorarios.filter(h=>h.clienteId===id&&h.saldo>0).reduce((s,h)=>s+h.saldo,0);
+  let msg=`¿Eliminar al cliente "${c.nombre}"?`;
+  if(causas>0) msg+=`\n⚠ Tiene ${causas} expediente${causas!==1?'s':''} asociado${causas!==1?'s':''}.`;
+  if(pend>0) msg+=`\n⚠ Tiene honorarios pendientes por $${pend.toLocaleString('es-AR')}.`;
+  msg+='\n\nEsta acción no se puede deshacer.';
+  if(!confirm(msg))return;
+  S.clientes=S.clientes.filter(x=>x.id!==id);
+  save();renderAll();
+}
+
+function renderCli(){
+  const q=(document.getElementById('s-cli')?.value||'').toLowerCase();
+  const rows=S.clientes.filter(c=>c.nombre.toLowerCase().includes(q)||(c.dni||'').includes(q)||(c.cuil||'').includes(q)||(c.cuit||'').includes(q)||(c.email||'').toLowerCase().includes(q));
+  document.getElementById('cli-count').textContent=rows.length+' cliente'+(rows.length!==1?'s':'');
+  const tb=document.getElementById('t-cli');
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="6"><div class="empty"><div class="empty-icon">👤</div>Sin clientes.</div></td></tr>`;return;}
+  tb.innerHTML=rows.map(c=>{
+    const causas=S.expedientes.filter(e=>e.clienteId===c.id).length;
+    const pend=S.honorarios.filter(h=>h.clienteId===c.id&&h.saldo>0).reduce((s,h)=>s+h.saldo,0);
+    const edad=calcEdad(c.fnac);
+    const edadStr=edad!==null?`${edad} años`:'—';
+    const meta=[c.nacionalidad,c.estadoCivil,c.ocupacion].filter(Boolean).join(' · ');
+    return`<tr>
+      <td data-label="Nombre">
+        <div class="td-main">${c.nombre}</div>
+        <div class="td-sub">${meta||c.domicilio||''}</div>
+      </td>
+      <td data-label="DNI/CUIT" style="color:var(--text-sub);font-size:13px">${c.tipoPersona==='Juridica'?'CUIT: '+( c.cuit||'—'):(c.dni?'DNI: '+c.dni:'—')+(c.cuil?'<div style="font-size:11px">CUIL: '+c.cuil+'</div>':'')} </td>
+      <td data-label="Edad / Nac." style="color:var(--text-sub);font-size:13px">${edadStr}${c.fnac?'<div style="font-size:11px;color:var(--text-dim)">'+fmt(c.fnac)+'</div>':''}</td>
+      <td data-label="Teléfono" style="color:var(--text-sub);font-size:13px">${c.tel||'—'}${c.tel2?'<div style="font-size:11px;color:var(--text-dim)">'+c.tel2+'</div>':''}</td>
+      <td data-label="Email" style="font-size:12px;color:var(--text-sub)">${c.email||'—'}</td>
+      <td data-label="Causas">
+        <span class="tag ${causas>0?'tag-active':'tag-closed'}">${causas} causa${causas!==1?'s':''}</span>
+        ${pend>0?` <span class="tag tag-pending">${$m(pend)} pend.</span>`:''}
+      </td>
+      <td data-label="">
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-ghost btn-xs" onclick="editCli('${c.id}')">✏️ Editar</button>
+          <button class="btn btn-danger btn-xs" onclick="delCli('${c.id}')">🗑</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ── VENCIMIENTOS ──
+let vencEditId=null;
+
+function editVenc(id){
+  const v=S.vencimientos.find(x=>x.id===id);
+  if(!v)return;
+  vencEditId=id;
+  populateSels();
+  document.getElementById('m-venc-title').textContent='Editar Vencimiento';
+  document.getElementById('v-fecha').value=v.fecha||'';
+  document.getElementById('v-tipo').value=v.tipo||'Plazo procesal';
+  document.getElementById('v-desc').value=v.desc||'';
+  document.getElementById('v-exp').value=v.expId||'';
+  document.getElementById('v-prior').value=v.prioridad||'Normal';
+  document.getElementById('m-venc').classList.add('open');
+}
+
+function saveVenc(){
+  const desc=document.getElementById('v-desc').value.trim();
+  const fecha=document.getElementById('v-fecha').value;
+  if(!desc||!fecha){alert('Completá descripción y fecha.');return;}
+  const datos={fecha,desc,tipo:document.getElementById('v-tipo').value,expId:document.getElementById('v-exp').value,prioridad:document.getElementById('v-prior').value};
+  if(vencEditId){
+    const idx=S.vencimientos.findIndex(x=>x.id===vencEditId);
+    if(idx>=0) S.vencimientos[idx]={...S.vencimientos[idx],...datos};
+    vencEditId=null;
+  } else {
+    S.vencimientos.push({id:uid(),...datos});
+  }
+  save();
+  closeM('m-venc');
+  document.getElementById('m-venc-title').textContent='Nuevo Vencimiento';
+  clr(['v-desc']);
+  renderAll();
+}
+function cumplirVenc(id){
+  const v=S.vencimientos.find(x=>x.id===id);
+  if(!v)return;
+  v.cumplido=true;
+  v.fechaCumplido=new Date().toISOString().split('T')[0];
+  save();renderVenc();renderDash();
+}
+
+function renderVenc(){
+  const pendientes=[...S.vencimientos].filter(v=>!v.cumplido).sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  const cumplidos=[...S.vencimientos].filter(v=>v.cumplido).sort((a,b)=>(b.fechaCumplido||b.fecha).localeCompare(a.fechaCumplido||a.fecha));
+
+  const tb=document.getElementById('t-venc');
+  const pc=document.getElementById('venc-pending-count');
+  const hc=document.getElementById('venc-hist-count');
+  if(pc) pc.textContent=pendientes.length+' pendiente'+(pendientes.length!==1?'s':'');
+  if(hc) hc.textContent=cumplidos.length+' registro'+(cumplidos.length!==1?'s':'');
+
+  // Pendientes
+  if(!pendientes.length){
+    tb.innerHTML=`<tr><td colspan="6"><div class="empty"><div class="empty-icon">🎉</div>¡Sin vencimientos pendientes!</div></td></tr>`;
+  } else {
+    tb.innerHTML=pendientes.map(v=>{
+      const d=days(v.fecha);
+      const dl=d<0?`<span style="color:var(--red);font-weight:600">Vencido hace ${Math.abs(d)}d</span>`:d===0?'<span style="color:var(--red);font-weight:700">HOY</span>':d===1?'<span style="color:var(--red)">Mañana</span>':`<span style="color:var(--text-sub)">${d}d</span>`;
+      const pt=v.prioridad==='Alta'?'tag-urgente':v.prioridad==='Media'?'tag-pending':'tag-active';
+      return`<tr>
+        <td data-label="Fecha"><div class="td-main">${fmt(v.fecha)}</div><div class="td-sub">${dl}</div></td>
+        <td data-label="Tipo" style="font-size:12px;color:var(--text-sub)">${v.tipo}</td>
+        <td data-label="Descripción"><div class="td-main">${v.desc}</div></td>
+        <td data-label="Expediente" style="font-size:12px;color:var(--text-sub)">${v.expId?eNro(v.expId):'—'}</td>
+        <td data-label="Prioridad"><span class="tag ${pt}">${v.prioridad}</span></td>
+        <td data-label="">
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            <button class="btn btn-sm" style="background:var(--green-dim);color:var(--green);border:1px solid var(--green);padding:4px 10px;font-size:12px" onclick="cumplirVenc('${v.id}')" title="Marcar como cumplido">✅ Cumplido</button>
+            <button class="btn btn-ghost btn-xs" onclick="editVenc('${v.id}')" title="Editar">✏️</button>
+            <button class="btn btn-danger btn-xs" onclick="del('vencimientos','${v.id}')">✕</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Historial cumplidos
+  const hist=document.getElementById('hist-venc');
+  if(!hist)return;
+  if(!cumplidos.length){
+    hist.innerHTML='<div class="empty"><div class="empty-icon">📋</div>Aún no hay vencimientos cumplidos.</div>';
+    return;
+  }
+  hist.innerHTML=cumplidos.map(v=>{
+    const pt=v.prioridad==='Alta'?'tag-urgente':v.prioridad==='Media'?'tag-pending':'tag-active';
+    return`<div class="hist-item">
+      <div class="hist-check">✓</div>
+      <div class="hist-body">
+        <div class="hist-title">${v.desc}</div>
+        <div class="hist-meta">
+          ${v.tipo} · Fecha original: ${fmt(v.fecha)}
+          ${v.expId?' · Exp: '+eNro(v.expId):''}
+          &nbsp;<span class="tag ${pt}" style="font-size:10px">${v.prioridad}</span>
+        </div>
+        <div class="hist-cumplido">✅ Cumplido el ${fmt(v.fechaCumplido)}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+        <div class="hist-fecha">${fmt(v.fechaCumplido)}</div>
+        <button class="btn btn-danger btn-xs" onclick="del('vencimientos','${v.id}')" title="Eliminar del historial">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── HONORARIOS ──
+function saveHonorario(){
+  const monto=parseFloat(document.getElementById('h-monto').value);
+  if(!monto||monto<=0){alert('Ingresá un monto válido.');return;}
+  const cliId=document.getElementById('h-cli').value;
+  if(!cliId){alert('Seleccioná un cliente.');return;}
+  S.honorarios.push({
+    id:uid(),
+    fecha:document.getElementById('h-fecha').value,
+    clienteId:cliId,
+    expId:document.getElementById('h-exp').value,
+    concepto:document.getElementById('h-conc').value,
+    monto,
+    saldo:monto  // saldo pendiente = monto completo al inicio
+  });
+  save();closeM('m-honorario');clr(['h-monto','h-conc']);renderAll();
+  if(document.getElementById('page-finanzas').classList.contains('active'))renderFin();
+}
+
+// ── PAGOS ──
+function populateHonorariosCliente(){
+  const cliId=document.getElementById('p-cli').value;
+  const sel=document.getElementById('p-hon');
+  sel.innerHTML='<option value="">Seleccionar honorario pendiente...</option>';
+  document.getElementById('p-saldo-info').textContent='';
+  if(!cliId)return;
+  const pendientes=S.honorarios.filter(h=>h.clienteId===cliId&&h.saldo>0);
+  pendientes.forEach(h=>{
+    sel.innerHTML+=`<option value="${h.id}">${h.concepto||'Sin concepto'} — Saldo: ${$m(h.saldo)}</option>`;
+  });
+}
+
+function savePago(){
+  const honId=document.getElementById('p-hon').value;
+  const monto=parseFloat(document.getElementById('p-monto').value);
+  const cliId=document.getElementById('p-cli').value;
+  if(!cliId){alert('Seleccioná un cliente.');return;}
+  if(!honId){alert('Seleccioná el honorario a pagar.');return;}
+  if(!monto||monto<=0){alert('Ingresá un monto válido.');return;}
+  const hon=S.honorarios.find(h=>h.id===honId);
+  if(!hon){alert('Honorario no encontrado.');return;}
+  if(monto>hon.saldo+0.01){alert(`El pago ($${monto}) supera el saldo pendiente (${$m(hon.saldo)}). Ingresá un monto igual o menor.`);return;}
+  // El saldo se recalcula en ensureArrays automáticamente
+  // registrar el pago
+  S.pagos.push({
+    id:uid(),
+    fecha:document.getElementById('p-fecha').value,
+    clienteId:cliId,
+    honorarioId:honId,
+    monto,
+    medio:document.getElementById('p-medio').value,
+    ref:document.getElementById('p-ref').value,
+    notas:document.getElementById('p-notas').value
+  });
+  save();closeM('m-pago');clr(['p-monto','p-ref','p-notas']);
+  document.getElementById('p-hon').innerHTML='<option value="">Seleccionar honorario pendiente...</option>';
+  document.getElementById('p-saldo-info').textContent='';
+  renderAll();
+  if(document.getElementById('page-finanzas').classList.contains('active'))renderFin();
+}
+
+// ── GASTOS ──
+function saveGasto(){
+  const monto=parseFloat(document.getElementById('g-monto').value);
+  if(!monto||monto<=0){alert('Ingresá un monto válido.');return;}
+  S.gastos.push({id:uid(),fecha:document.getElementById('g-fecha').value,categoria:document.getElementById('g-cat').value,desc:document.getElementById('g-desc').value,monto,expId:document.getElementById('g-exp').value});
+  save();closeM('m-gasto');clr(['g-monto','g-desc']);renderAll();
+  if(document.getElementById('page-finanzas').classList.contains('active'))renderFin();
+}
+
+// ── FINANZAS ──
+function renderFin(){
+  ensureArrays();
+
+  // ── Selector de meses ──
+  const sel=document.getElementById('fin-mes');
+  if(!sel) return;
+  const months=new Set([new Date().toISOString().slice(0,7)]);
+  [...S.honorarios,...S.gastos,...S.pagos,...S.actos,...S.pagosExt].forEach(x=>{if(x&&x.fecha)months.add(ym(x.fecha));});
+  const arr=[...months].sort().reverse();
+  const cur=sel.value||arr[0];
+  const mnames=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  sel.innerHTML='';
+  arr.forEach(m=>{const[y,mo]=m.split('-');sel.innerHTML+=`<option value="${m}">${mnames[parseInt(mo)-1]} ${y}</option>`;});
+  if([...sel.options].some(o=>o.value===cur)) sel.value=cur;
+  const mes=sel.value;
+
+  // ── CÁLCULOS JUDICIAL ──
+  const pagosMes    = S.pagos.filter(p=>ym(p.fecha)===mes);
+  const cobJud      = pagosMes.reduce((s,p)=>s+p.monto, 0);
+  const honMes      = S.honorarios.filter(h=>ym(h.fecha)===mes);
+  const factJud     = honMes.reduce((s,h)=>s+h.monto, 0);
+  const pendJud     = S.honorarios.reduce((s,h)=>s+(h.saldo||0), 0);
+
+  // ── CÁLCULOS EXTRAJUDICIAL ──
+  const pagosExtMes = S.pagosExt.filter(p=>ym(p.fecha)===mes);
+  const cobExt      = pagosExtMes.reduce((s,p)=>s+p.monto, 0);
+  const actosMes    = S.actos.filter(a=>ym(a.fecha)===mes);
+  const factExt     = actosMes.filter(a=>a.honorario>0).reduce((s,a)=>s+(a.honorario||0), 0);
+  const pendExt     = S.actos.filter(a=>(a.saldo||0)>0).reduce((s,a)=>s+(a.saldo||0), 0);
+
+  // ── TOTALES ──
+  const totalCob    = cobJud + cobExt;
+  const totalFact   = factJud + factExt;
+  const totalPend   = pendJud + pendExt;
+  const gastosMes   = S.gastos.filter(g=>ym(g.fecha)===mes);
+  const totalGasto  = gastosMes.reduce((s,g)=>s+g.monto, 0);
+  const balance     = totalCob - totalGasto;
+
+  // ── ACTUALIZAR TARJETAS ──
+  const _s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  _s('f-ingreso',   $m(cobJud));
+  _s('f-ingreso-ext', $m(cobExt));
+  _s('f-ingreso-total', $m(totalCob));
+  _s('f-gasto',     $m(totalGasto));
+  _s('f-balance',   $m(balance));
+  _s('f-pend',      $m(totalPend));
+  _s('f-total',     $m(factJud));
+  _s('f-total-ext', $m(factExt));
+  _s('f-total-global', $m(totalFact));
+  const bc=document.getElementById('f-bal-card');
+  if(bc) bc.className='fin-card '+(balance>=0?'bal-pos':'bal-neg');
+
+  // ── TABLA: HONORARIOS JUDICIALES PENDIENTES POR CLIENTE ──
+  renderPendTable();
+
+  // ── TABLA: HONORARIOS JUDICIALES DEL PERÍODO ──
+  const th=document.getElementById('t-honorarios');
+  if(th){
+    if(!honMes.length){
+      th.innerHTML=`<tr><td colspan="6"><div class="empty"><div class="empty-icon">📋</div>Sin honorarios judiciales este período.</div></td></tr>`;
+    } else {
+      th.innerHTML=[...honMes].reverse().map(h=>{
+        const saldoColor=h.saldo<=0?'var(--green)':h.saldo<h.monto?'var(--orange)':'var(--red)';
+        const saldoLabel=h.saldo<=0?'✅ Cobrado':$m(h.saldo)+' pend.';
+        return`<tr>
+          <td data-label="Fecha">${fmt(h.fecha)}</td>
+          <td data-label="Cliente"><b>${cNom(h.clienteId)}</b></td>
+          <td data-label="Concepto">${h.concepto||'—'}${h.expId?`<div class="td-sub" style="font-size:11px;color:var(--text-dim)">Exp: ${S.expedientes.find(e=>e.id===h.expId)?.nro||''}</div>`:''}</td>
+          <td data-label="Monto"><b style="color:var(--gold)">${$m(h.monto)}</b></td>
+          <td data-label="Saldo"><b style="color:${saldoColor}">${saldoLabel}</b></td>
+          <td><button class="btn btn-danger btn-xs" onclick="delHonorario('${h.id}')">🗑</button></td>
+        </tr>`;
+      }).join('');
+    }
+  }
+
+  // ── TABLA: GASTOS ──
+  const tg=document.getElementById('t-gastos');
+  if(tg){
+    if(!gastosMes.length){
+      tg.innerHTML=`<tr><td colspan="5"><div class="empty"><div class="empty-icon">📉</div>Sin gastos este período.</div></td></tr>`;
+    } else {
+      tg.innerHTML=[...gastosMes].reverse().map(g=>`<tr>
+        <td data-label="Fecha">${fmt(g.fecha)}</td>
+        <td data-label="Categoría"><span class="tag tag-closed">${g.categoria}</span></td>
+        <td data-label="Descripción">${g.desc||'—'}</td>
+        <td data-label="Monto"><b style="color:var(--red)">${$m(g.monto)}</b></td>
+        <td><button class="btn btn-danger btn-xs" onclick="del('gastos','${g.id}');renderFin()">🗑</button></td>
+      </tr>`).join('');
+    }
+  }
+
+  // ── TABLA: PAGOS JUDICIALES RECIBIDOS ──
+  const tp=document.getElementById('t-pagos');
+  if(tp){
+    if(!pagosMes.length){
+      tp.innerHTML=`<tr><td colspan="7"><div class="empty"><div class="empty-icon">✅</div>Sin pagos judiciales este período.</div></td></tr>`;
+    } else {
+      tp.innerHTML=[...pagosMes].reverse().map(p=>{
+        const hon=S.honorarios.find(h=>h.id===p.honorarioId);
+        return`<tr>
+          <td data-label="Fecha">${fmt(p.fecha)}</td>
+          <td data-label="Cliente"><b>${cNom(p.clienteId)}</b></td>
+          <td data-label="Concepto">${hon?hon.concepto||'—':'—'}</td>
+          <td data-label="Medio"><span class="tag tag-active" style="font-size:11px">${p.medio||'—'}</span></td>
+          <td data-label="Referencia" style="color:var(--text-sub)">${p.ref||'—'}</td>
+          <td data-label="Monto"><b style="color:var(--green)">${$m(p.monto)}</b></td>
+          <td><button class="btn btn-danger btn-xs" onclick="delPago('${p.id}')">🗑</button></td>
+        </tr>`;
+      }).join('');
+    }
+  }
+
+  // ── TABLA: TRABAJOS EXTRAJUDICIALES ──
+  const ta=document.getElementById('t-actos-fin');
+  if(ta){
+    if(!actosMes.length){
+      ta.innerHTML=`<tr><td colspan="7"><div class="empty"><div class="empty-icon">📝</div>Sin trabajos extrajudiciales este período.</div></td></tr>`;
+    } else {
+      ta.innerHTML=[...actosMes].sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||'')).map(a=>{
+        const saldo=a.saldo||0;
+        const pagado=(a.honorario||0)-saldo;
+        const saldoColor=saldo<=0?'var(--green)':saldo<a.honorario?'var(--orange)':'var(--red)';
+        return`<tr>
+          <td data-label="Fecha">${fmt(a.fecha)}</td>
+          <td data-label="Cliente"><b>${cNom(a.clienteId)}</b></td>
+          <td data-label="Tipo"><span class="tag tag-civil" style="font-size:11px">${a.tipo}</span></td>
+          <td data-label="Descripción">${a.titulo||'—'}</td>
+          <td data-label="Honorarios a percibir"><b style="color:var(--gold)">${a.honorario>0?$m(a.honorario):'—'}</b></td>
+          <td data-label="Cobrado"><b style="color:var(--green)">${pagado>0?$m(pagado):'—'}</b></td>
+          <td data-label="Saldo"><b style="color:${saldoColor}">${a.honorario>0?(saldo<=0?'✅ Cobrado':$m(saldo)+' pend.'):'—'}</b></td>
+        </tr>`;
+      }).join('');
+    }
+  }
+
+  // ── TABLA: PAGOS EXTRAJUDICIALES RECIBIDOS ──
+  const tpe=document.getElementById('t-pagos-ext');
+  if(tpe){
+    if(!pagosExtMes.length){
+      tpe.innerHTML=`<tr><td colspan="7"><div class="empty"><div class="empty-icon">✅</div>Sin pagos extrajudiciales este período.</div></td></tr>`;
+    } else {
+      tpe.innerHTML=[...pagosExtMes].reverse().map(p=>{
+        const acto=S.actos.find(a=>a.id===p.actoId);
+        return`<tr>
+          <td data-label="Fecha">${fmt(p.fecha)}</td>
+          <td data-label="Cliente"><b>${cNom(p.clienteId)}</b></td>
+          <td data-label="Trabajo">${acto?acto.titulo||acto.tipo:'—'}</td>
+          <td data-label="Medio"><span class="tag tag-active" style="font-size:11px">${p.medio||'—'}</span></td>
+          <td data-label="Referencia" style="color:var(--text-sub)">${p.ref||'—'}</td>
+          <td data-label="Monto"><b style="color:var(--green)">${$m(p.monto)}</b></td>
+          <td><button class="btn btn-danger btn-xs" onclick="delPagoExt('${p.id}')">🗑</button></td>
+        </tr>`;
+      }).join('');
+    }
+  }
+
+  // ── TABLA: PENDIENTES EXTRAJUDICIALES POR CLIENTE ──
+  const tPendExt=document.getElementById('t-pend-ext');
+  if(tPendExt){
+    const mapExt={};
+    S.actos.filter(a=>a.honorario>0&&(a.saldo||0)>0).forEach(a=>{
+      const k=a.clienteId||'x';
+      if(!mapExt[k]) mapExt[k]={nombre:cNom(a.clienteId),items:[],totalFact:0,totalSaldo:0};
+      mapExt[k].items.push(a);
+      mapExt[k].totalFact+=(a.honorario||0);
+      mapExt[k].totalSaldo+=(a.saldo||0);
+    });
+    const entries=Object.values(mapExt).sort((a,b)=>b.totalSaldo-a.totalSaldo);
+    if(!entries.length){
+      tPendExt.innerHTML=`<tr><td colspan="5"><div class="empty"><div class="empty-icon">✅</div>Sin trabajos extrajudiciales pendientes de cobro.</div></td></tr>`;
+    } else {
+      tPendExt.innerHTML=entries.map(e=>{
+        const pagado=e.totalFact-e.totalSaldo;
+        const pct=e.totalFact>0?Math.round((pagado/e.totalFact)*100):0;
+        return`<tr>
+          <td data-label="Cliente"><b>${e.nombre}</b><div class="td-sub">${e.items.map(a=>a.titulo||a.tipo).join(' · ')}</div></td>
+          <td data-label="Honorarios a percibir" style="color:var(--gold);font-weight:600">${$m(e.totalFact)}</td>
+          <td data-label="Cobrado" style="color:var(--green);font-weight:600">${$m(pagado)} <span style="font-size:11px;color:var(--text-dim)">(${pct}%)</span></td>
+          <td data-label="Saldo pendiente"><b style="color:var(--orange)">${$m(e.totalSaldo)}</b></td>
+          <td><button class="btn btn-gold btn-xs" onclick="abrirPagoExtCli('${e.items[0].clienteId}')">💳 Pagar</button></td>
+        </tr>`;
+      }).join('');
+    }
+  }
+}
+
+
+function renderPendTable(){
+  const tb=document.getElementById('t-pend-cli');
+  // Agrupar por cliente
+  const map={};
+  S.honorarios.forEach(h=>{
+    const k=h.clienteId||'x';
+    if(!map[k])map[k]={nombre:h.clienteId?cNom(h.clienteId):'Sin cliente',items:[],total:0,saldo:0};
+    map[k].items.push(h);map[k].total+=h.monto;map[k].saldo+=h.saldo;
+  });
+  const entries=Object.values(map).filter(e=>e.saldo>0).sort((a,b)=>b.saldo-a.saldo);
+  if(!entries.length){
+    tb.innerHTML=`<tr><td colspan="6"><div class="empty"><div class="empty-icon">✅</div>Sin honorarios pendientes</div></td></tr>`;
+    return;
+  }
+  tb.innerHTML=entries.map(e=>{
+    const pagado=e.total-e.saldo;
+    const pct=Math.round((pagado/e.total)*100);
+    return`<tr>
+      <td data-label="Cliente"><div class="td-main">${e.nombre}</div><div class="td-sub">${e.items.length} honorario${e.items.length!==1?'s':''}</div></td>
+      <td data-label="Honorario" style="font-size:12px;color:var(--text-sub)">${e.items.map(h=>h.concepto||'Sin concepto').join(', ')}</td>
+      <td data-label="Honorarios a percibir" style="color:var(--gold);font-weight:600">${$m(e.total)}</td>
+      <td data-label="Pagado" style="color:var(--green);font-weight:600">${$m(pagado)}<span style="font-size:10px;color:var(--text-dim);margin-left:4px">(${pct}%)</span></td>
+      <td data-label="Saldo pendiente"><b style="color:var(--orange)">${$m(e.saldo)}</b></td>
+      <td data-label=""><button class="btn btn-gold btn-xs" onclick="abrirPagoCli('${e.items[0].clienteId}')">Pagar</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function abrirPagoCli(cliId){
+  openM('m-pago');
+  setTimeout(()=>{
+    document.getElementById('p-cli').value=cliId;
+    populateHonorariosCliente();
+  },50);
+}
+
+function renderPendList(cid){
+  const cont=document.getElementById(cid);
+  const map={};
+  S.honorarios.filter(h=>h.saldo>0).forEach(h=>{
+    const k=h.clienteId||'x';
+    if(!map[k])map[k]={nombre:h.clienteId?cNom(h.clienteId):'Sin cliente',total:0,count:0};
+    map[k].total+=h.saldo;map[k].count++;
+  });
+  const entries=Object.values(map).sort((a,b)=>b.total-a.total);
+  cont.innerHTML=!entries.length?'<div class="empty"><div class="empty-icon">✅</div>Sin honorarios pendientes</div>'
+    :entries.map(e=>`<div class="pend-row"><div><div class="pend-name">${e.nombre}</div><div class="pend-meta">${e.count} honorario${e.count!==1?'s':''} pendiente${e.count!==1?'s':''}</div></div><div class="pend-amt">${$m(e.total)}</div></div>`).join('');
+}
+
+function delHonorario(id){
+  if(!confirm('¿Eliminar este honorario? También se eliminarán sus pagos.'))return;
+  S.pagos=S.pagos.filter(p=>p.honorarioId!==id);
+  S.honorarios=S.honorarios.filter(h=>h.id!==id);
+  save();renderAll();renderFin();
+}
+
+function delPago(id){
+  if(!confirm('¿Eliminar este pago? El saldo del honorario se restaurará.'))return;
+  S.pagos=S.pagos.filter(p=>p.id!==id);
+  save();renderAll();renderFin();
+}
+
+// ── DASHBOARD ──
+function renderDash(){
+  ensureArrays();
+
+  const mes=new Date().toISOString().slice(0,7);
+  const activos=S.expedientes.filter(e=>e.estado==='Activo').length;
+  const actosEnProceso=S.actos.filter(a=>a.estado==='En proceso').length;
+  const urgentes=S.vencimientos.filter(v=>!v.cumplido&&days(v.fecha)<=7&&days(v.fecha)>=0).length;
+  const clientes=S.clientes.length;
+
+  // Cobrado judicial (pagos registrados este mes)
+  const cobJudMes=S.pagos.filter(p=>ym(p.fecha)===mes).reduce((s,p)=>s+p.monto,0);
+  // Cobrado extrajudicial (pagosExt registrados este mes)
+  const cobExtMes=S.pagosExt.filter(p=>ym(p.fecha)===mes).reduce((s,p)=>s+p.monto,0);
+  const totalCobMes=cobJudMes+cobExtMes;
+
+  // Pendiente judicial
+  const pendJud=S.honorarios.reduce((s,h)=>s+(h.saldo||0),0);
+  // Pendiente extrajudicial
+  const pendExt=S.actos.filter(a=>a.honorario>0).reduce((s,a)=>s+(a.saldo!==undefined?a.saldo:a.honorario),0);
+  const totalPend=pendJud+pendExt;
+
+  // Gastos del mes
+  const gastosMes=S.gastos.filter(g=>ym(g.fecha)===mes).reduce((s,g)=>s+g.monto,0);
+  // Balance del mes
+  const balanceMes=totalCobMes-gastosMes;
+
+  // Actualizar tarjetas
+  const _s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  _s('ds-exp',activos);
+  _s('ds-actos',actosEnProceso);
+  _s('ds-venc',urgentes);
+  _s('ds-clientes',clientes);
+  _s('ds-ingreso',$m(totalCobMes));
+  _s('ds-pend',$m(totalPend));
+  _s('ds-gastos',$m(gastosMes));
+  _s('ds-balance',$m(balanceMes));
+  _s('b-exp',activos);
+  _s('b-venc',urgentes);
+
+  // Color balance
+  const bc=document.getElementById('ds-balance-card');
+  if(bc) bc.className='scard '+(balanceMes>=0?'green':'red');
+
+  // Vencimientos próximos
+  const prox=[...S.vencimientos].filter(v=>!v.cumplido&&days(v.fecha)>=0).sort((a,b)=>a.fecha.localeCompare(b.fecha)).slice(0,5);
+  const dv=document.getElementById('dash-venc');
+  if(dv) dv.innerHTML=!prox.length?'<div class="empty"><div class="empty-icon">✅</div>Sin vencimientos próximos</div>'
+    :prox.map(v=>{const d=days(v.fecha);return`<div class="vi"><div class="vi-dot ${d<=3?'dot-r':d<=7?'dot-o':'dot-g'}"></div><div class="vi-body"><div class="vi-title">${v.desc}</div><div class="vi-meta">${v.tipo}${v.expId?' · '+eNro(v.expId):''}</div></div><div class="vi-date">${fmt(v.fecha)}<br><span style="color:${d<=3?'var(--red)':'var(--text-dim)'}">${d===0?'HOY':d+'d'}</span></div></div>`;}).join('');
+
+  // Pendientes judiciales por cliente
+  renderPendList('dash-pend');
+
+  // Pendientes extrajudiciales por cliente
+  const contExt=document.getElementById('dash-pend-ext');
+  if(contExt){
+    const mapExt={};
+    S.actos.filter(a=>a.honorario>0&&(a.saldo!==undefined?a.saldo:a.honorario)>0).forEach(a=>{
+      const k=a.clienteId||'x';
+      if(!mapExt[k])mapExt[k]={nombre:a.clienteId?cNom(a.clienteId):'Sin cliente',total:0,count:0};
+      mapExt[k].total+=(a.saldo!==undefined?a.saldo:a.honorario);
+      mapExt[k].count++;
+    });
+    const extEntries=Object.values(mapExt).sort((a,b)=>b.total-a.total);
+    contExt.innerHTML=!extEntries.length?'<div class="empty"><div class="empty-icon">✅</div>Sin pendientes extrajudiciales</div>'
+      :extEntries.map(e=>`<div class="pend-row"><div><div class="pend-name">${e.nombre}</div><div class="pend-meta">${e.count} trabajo${e.count!==1?'s':''} pendiente${e.count!==1?'s':''}</div></div><div class="pend-amt">${$m(e.total)}</div></div>`).join('');
+  }
+
+  // Actualizar badge agenda
+  updateAgendaBadges();
+}
+
+// ── CALENDAR ──
+let calY,calM;
+
+function updateAgendaBadges(){
+  const pendientes=S.vencimientos.filter(v=>!v.cumplido);
+  const hoy=pendientes.filter(v=>days(v.fecha)===0).length;
+  const urgentes=pendientes.filter(v=>days(v.fecha)>0&&days(v.fecha)<=3).length;
+  const proximos=pendientes.filter(v=>days(v.fecha)>3&&days(v.fecha)<=15).length;
+
+  const bHoy=document.getElementById('b-agenda-hoy');
+  const bProx=document.getElementById('b-agenda-prox');
+  if(bHoy){bHoy.textContent=(hoy+urgentes);bHoy.style.display=(hoy+urgentes)>0?'inline':'none';}
+  if(bProx){bProx.textContent=proximos;bProx.style.display=proximos>0?'inline':'none';}
+}
+
+function renderAgendaAlertas(){
+  const cont=document.getElementById('agenda-alertas');
+  if(!cont)return;
+  const pendientes=S.vencimientos.filter(v=>!v.cumplido);
+  const hoy=pendientes.filter(v=>days(v.fecha)===0);
+  const urgentes=pendientes.filter(v=>days(v.fecha)>0&&days(v.fecha)<=3);
+  const proximos=pendientes.filter(v=>days(v.fecha)>3&&days(v.fecha)<=15);
+  let html='';
+
+  if(hoy.length){
+    html+=`<div class="alerta-strip rojo">
+      <div class="alerta-icon">🔴</div>
+      <div class="alerta-body">
+        <div class="alerta-title">HOY — ${hoy.length} vencimiento${hoy.length!==1?'s':''} para hoy</div>
+        <div class="alerta-detail">${hoy.map(v=>`<b>${v.desc}</b>${v.expId?' (Exp: '+eNro(v.expId)+')':''}`).join(' &nbsp;·&nbsp; ')}</div>
+      </div>
+    </div>`;
+  }
+  if(urgentes.length){
+    html+=`<div class="alerta-strip rojo">
+      <div class="alerta-icon">⚠️</div>
+      <div class="alerta-body">
+        <div class="alerta-title">${urgentes.length} vencimiento${urgentes.length!==1?'s':''} en los próximos 3 días</div>
+        <div class="alerta-detail">${urgentes.map(v=>`<b>${v.desc}</b> — ${fmt(v.fecha)}${v.expId?' (Exp: '+eNro(v.expId)+')':''}`).join('<br>')}</div>
+      </div>
+    </div>`;
+  }
+  if(proximos.length){
+    html+=`<div class="alerta-strip amarillo">
+      <div class="alerta-icon">🟡</div>
+      <div class="alerta-body">
+        <div class="alerta-title">${proximos.length} vencimiento${proximos.length!==1?'s':''} próximos (4–15 días)</div>
+        <div class="alerta-detail">${proximos.map(v=>`<b>${v.desc}</b> — ${fmt(v.fecha)} (en ${days(v.fecha)}d)${v.expId?' · Exp: '+eNro(v.expId):''}`).join('<br>')}</div>
+      </div>
+    </div>`;
+  }
+  if(!hoy.length&&!urgentes.length&&!proximos.length){
+    html=`<div class="alerta-strip verde"><div class="alerta-icon">✅</div><div class="alerta-body"><div class="alerta-title">Sin vencimientos urgentes</div><div class="alerta-detail">No hay plazos para hoy ni en los próximos 15 días.</div></div></div>`;
+  }
+  cont.innerHTML=html;
+}
+
+function renderCal(){
+  const now=new Date();
+  if(!calY)calY=now.getFullYear();
+  if(calM===undefined)calM=now.getMonth();
+  const mnames=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  document.getElementById('cal-label').textContent=mnames[calM]+' '+calY;
+  document.getElementById('cal-dh').innerHTML=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(d=>`<div class="cal-dh">${d}</div>`).join('');
+  const fd=new Date(calY,calM,1).getDay(),so=fd===0?6:fd-1,dim=new Date(calY,calM+1,0).getDate(),dp=new Date(calY,calM,0).getDate();
+  const ts=now.toISOString().split('T')[0];
+  const em={};
+  S.vencimientos.filter(v=>!v.cumplido).forEach(v=>{if(!em[v.fecha])em[v.fecha]=[];em[v.fecha].push(v);});
+  let h='';
+  for(let i=so-1;i>=0;i--)h+=`<div class="cal-day other"><div class="cal-n">${dp-i}</div></div>`;
+  for(let d=1;d<=dim;d++){
+    const ds=`${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const evs=em[ds]||[];
+    const dd=days(ds);
+    const dayClass=ds===ts?'today':evs.some(v=>v.prioridad==='Alta')?'has-urgent':'';
+    h+=`<div class="cal-day ${dayClass}">
+      <div class="cal-n">${d}</div>
+      ${evs.slice(0,2).map(v=>{
+        const cl=days(v.fecha)===0?'urgente':days(v.fecha)<=3?'urgente':v.tipo==='Audiencia'?'aud':'normal';
+        return`<div class="cal-ev ${cl}">${v.desc}</div>`;
+      }).join('')}
+      ${evs.length>2?`<div style="font-size:9px;color:var(--text-dim)">+${evs.length-2} más</div>`:''}
+    </div>`;
+  }
+  const rem=(7-(so+dim)%7)%7;
+  for(let i=1;i<=rem;i++)h+=`<div class="cal-day other"><div class="cal-n">${i}</div></div>`;
+  document.getElementById('cal-grid').innerHTML=h;
+
+  // Render monthly list
+  const mesStr=`${calY}-${String(calM+1).padStart(2,'0')}`;
+  const mesVenc=S.vencimientos.filter(v=>v.fecha&&v.fecha.startsWith(mesStr)).sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  const mc=document.getElementById('cal-mes-count');
+  if(mc) mc.textContent=mesVenc.length+' evento'+(mesVenc.length!==1?'s':'');
+  const tl=document.getElementById('t-cal-lista');
+  if(tl){
+    if(!mesVenc.length){tl.innerHTML=`<tr><td colspan="6"><div class="empty"><div class="empty-icon">📅</div>Sin eventos este mes.</div></td></tr>`;}
+    else{
+      tl.innerHTML=mesVenc.map(v=>{
+        const d=days(v.fecha);
+        const pt=v.prioridad==='Alta'?'tag-urgente':v.prioridad==='Media'?'tag-pending':'tag-active';
+        const estadoColor=v.cumplido?'color:var(--green)':d<0?'color:var(--text-dim)':d===0?'color:var(--red);font-weight:700':d<=3?'color:var(--red)':d<=15?'color:var(--orange)':'color:var(--text-sub)';
+        const estadoLabel=v.cumplido?'✅ Cumplido':d<0?`Vencido hace ${Math.abs(d)}d`:d===0?'HOY':d===1?'Mañana':`En ${d}d`;
+        return`<tr style="${v.cumplido?'opacity:.6':''}">
+          <td data-label="Fecha"><b>${fmt(v.fecha)}</b></td>
+          <td data-label="Descripción"><b>${v.desc}</b></td>
+          <td data-label="Tipo" style="font-size:12px;color:var(--text-sub)">${v.tipo}</td>
+          <td data-label="Expediente" style="font-size:12px;color:var(--text-sub)">${v.expId?eNro(v.expId):'—'}</td>
+          <td data-label="Prioridad"><span class="tag ${pt}">${v.prioridad}</span></td>
+          <td data-label="Estado"><span style="${estadoColor};font-size:13px;font-weight:600">${estadoLabel}</span></td>
+        </tr>`;
+      }).join('');
+    }
+  }
+
+  renderAgendaAlertas();
+  updateAgendaBadges();
+}
+function changeMonth(d){calM+=d;if(calM>11){calM=0;calY++;}if(calM<0){calM=11;calY--;}renderCal();}
+
+// ── DELETE ──
+function del(col,id){if(!confirm('¿Eliminar?'))return;S[col]=S[col].filter(x=>x.id!==id);save();renderAll();}
+
+
+// ── EXPORTAR BALANCE ──
+function exportBalance(){
+  const sel=document.getElementById('fin-mes');
+  const mes=sel?sel.value:new Date().toISOString().slice(0,7);
+  const [y,mo]=mes.split('-');
+  const mnames=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const mesLabel=mnames[parseInt(mo)-1]+' '+y;
+
+  const iMes=S.honorarios.filter(h=>h.fecha&&h.fecha.startsWith(mes));
+  const pagosMes=S.pagos.filter(p=>p.fecha&&p.fecha.startsWith(mes));
+  const gMes=S.gastos.filter(g=>g.fecha&&g.fecha.startsWith(mes));
+  if(!S.actos) S.actos=[];
+  const actosMesExp=S.actos.filter(a=>a.fecha&&a.fecha.startsWith(mes));
+  const cobradoJud=pagosMes.reduce((s,p)=>s+p.monto,0);
+  if(!S.pagosExt)S.pagosExt=[];
+  const pagosExtExp=S.pagosExt.filter(p=>p.fecha&&p.fecha.startsWith(mes));
+  const cobradoExtExp=pagosExtExp.reduce((s,p)=>s+p.monto,0);
+  const cobrado=cobradoJud+cobradoExtExp;
+  const totalGasto=gMes.reduce((s,g)=>s+g.monto,0);
+  const balance=cobrado-totalGasto;
+  const totPend=S.honorarios.reduce((s,h)=>s+h.saldo,0)+(S.actos||[]).filter(a=>a.honorario>0&&(a.saldo!==undefined?a.saldo:a.honorario)>0).reduce((s,a)=>s+(a.saldo!==undefined?a.saldo:a.honorario),0);
+
+  const fmt2=(f)=>{if(!f)return'';const[yy,mm,dd]=f.split('-');return`${dd}/${mm}/${yy}`;};
+
+  // ── Build workbook using SheetJS via CDN ──
+  const script=document.createElement('script');
+  script.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+  script.onload=()=>{
+    const wb=XLSX.utils.book_new();
+
+    // ── Hoja 1: Resumen ──
+    const resumen=[
+      ['BALANCE MENSUAL — Dr. Pablo Palmiero'],
+      ['Período:', mesLabel],
+      ['Generado:', fmt2(new Date().toISOString().split('T')[0])],
+      [],
+      ['RESUMEN GENERAL', ''],
+      ['Cobrado — Honorarios judiciales', cobradoJud],
+      ['Cobrado — Trabajos extrajudiciales', cobradoExtExp],
+      ['TOTAL COBRADO', cobrado],
+      [],
+      ['Gastos del período', totalGasto],
+      ['GANANCIA NETA (Cobrado − Gastos)', balance],
+      [],
+      ['Honorarios judiciales pendientes', S.honorarios.reduce((s,h)=>s+h.saldo,0)],
+      ['Trabajos extrajudiciales pendientes', S.actos.filter(a=>a.cobro==='Pendiente'&&a.honorario>0).reduce((s,a)=>s+(a.honorario||0),0)],
+      ['TOTAL PENDIENTE DE COBRO', totPend],
+    ];
+    const ws1=XLSX.utils.aoa_to_sheet(resumen);
+    ws1['!cols']=[{wch:40},{wch:20}];
+    XLSX.utils.book_append_sheet(wb,ws1,'Resumen');
+
+    // ── Hoja 2: Pagos recibidos ──
+    const pagosData=[['Fecha','Cliente','Concepto / Honorario','Medio de pago','Referencia / Comprobante','Monto ($)']];
+    pagosMes.forEach(p=>{
+      const hon=S.honorarios.find(h=>h.id===p.honorarioId);
+      pagosData.push([fmt2(p.fecha),cNom(p.clienteId),hon?hon.concepto||'':'',p.medio||'',p.ref||'',p.monto]);
+    });
+    pagosData.push([]);
+    pagosData.push(['','','','','TOTAL COBRADO',cobrado]);
+    const ws2=XLSX.utils.aoa_to_sheet(pagosData);
+    ws2['!cols']=[{wch:14},{wch:28},{wch:35},{wch:22},{wch:28},{wch:16}];
+    XLSX.utils.book_append_sheet(wb,ws2,'Pagos recibidos');
+
+    // ── Hoja 3: Honorarios a percibir ──
+    const honData=[['Fecha','Cliente','Concepto','Honorarios a percibir ($)','Saldo pendiente ($)','Estado']];
+    iMes.forEach(h=>{
+      honData.push([fmt2(h.fecha),cNom(h.clienteId),h.concepto||'',h.monto,h.saldo,h.saldo<=0?'Cobrado':h.saldo<h.monto?'Pago parcial':'Pendiente']);
+    });
+    honData.push([]);
+    honData.push(['','','TOTAL FACTURADO',iMes.reduce((s,h)=>s+h.monto,0),'','']);
+    const ws3=XLSX.utils.aoa_to_sheet(honData);
+    ws3['!cols']=[{wch:14},{wch:28},{wch:35},{wch:20},{wch:20},{wch:16}];
+    XLSX.utils.book_append_sheet(wb,ws3,'Honorarios');
+
+    // ── Hoja 4: Gastos ──
+    const gastosData=[['Fecha','Categoría','Descripción','Monto ($)','Expediente']];
+    gMes.forEach(g=>{
+      gastosData.push([fmt2(g.fecha),g.categoria,g.desc||'',g.monto,g.expId?eNro(g.expId):'']);
+    });
+    gastosData.push([]);
+    gastosData.push(['','','TOTAL GASTOS',totalGasto,'']);
+    const ws4=XLSX.utils.aoa_to_sheet(gastosData);
+    ws4['!cols']=[{wch:14},{wch:28},{wch:35},{wch:16},{wch:20}];
+    XLSX.utils.book_append_sheet(wb,ws4,'Gastos');
+
+    // ── Hoja 5: Trabajos Extrajudiciales ──
+    const extData=[['Fecha','Cliente','Tipo','Descripción / Título','Honorario ($)','Estado cobro','Notas']];
+    actosMesExp.forEach(a=>{
+      extData.push([fmt2(a.fecha),cNom(a.clienteId),a.tipo,a.titulo||'',a.honorario||0,a.cobro,a.notas||'']);
+    });
+    extData.push([]);
+    extData.push(['','','','TOTAL FACTURADO EXT.',actosMesExp.filter(a=>a.cobro!=='Sin honorario').reduce((s,a)=>s+(a.honorario||0),0),'','']);
+    extData.push(['','','','TOTAL COBRADO EXT.',cobradoExtExp,'','']);
+    if(pagosExtExp && pagosExtExp.length){
+      extData.push([]);
+      extData.push(['PAGOS EXTRAJUDICIALES RECIBIDOS','','','','','','']);
+      extData.push(['Fecha','Cliente','Trabajo','Medio de pago','Referencia','Monto ($)','']);
+      pagosExtExp.forEach(p=>{const a=S.actos.find(x=>x.id===p.actoId);extData.push([fmt2(p.fecha),cNom(p.clienteId),a?a.titulo||a.tipo:'—',p.medio||'',p.ref||'',p.monto,'']);});
+    }
+    const ws5e=XLSX.utils.aoa_to_sheet(extData);
+    ws5e['!cols']=[{wch:14},{wch:28},{wch:22},{wch:35},{wch:18},{wch:18},{wch:30}];
+    XLSX.utils.book_append_sheet(wb,ws5e,'Trabajos Extrajudiciales');
+
+    // ── Hoja 6: Honorarios pendientes por cliente ──
+    const pendMap={};
+    S.honorarios.filter(h=>h.saldo>0).forEach(h=>{
+      const k=h.clienteId||'x';
+      if(!pendMap[k])pendMap[k]={nombre:h.clienteId?cNom(h.clienteId):'Sin cliente',total:0,saldo:0,items:[]};
+      pendMap[k].total+=h.monto;pendMap[k].saldo+=h.saldo;pendMap[k].items.push(h.concepto||'Sin concepto');
+    });
+    const pendData=[['Cliente','Conceptos pendientes','Total honorarios a percibir ($)','Pagado ($)','Saldo pendiente ($)']];
+    Object.values(pendMap).sort((a,b)=>b.saldo-a.saldo).forEach(e=>{
+      pendData.push([e.nombre,e.items.join(' / '),e.total,e.total-e.saldo,e.saldo]);
+    });
+    const ws6=XLSX.utils.aoa_to_sheet(pendData);
+    ws6['!cols']=[{wch:28},{wch:40},{wch:20},{wch:16},{wch:20}];
+    XLSX.utils.book_append_sheet(wb,ws6,'Pendientes por cliente');
+
+    // ── Descargar ──
+    XLSX.writeFile(wb,`Balance_${mesLabel.replace(' ','_')}_DeBlassiis.xlsx`);
+  };
+  script.onerror=()=>alert('Error al cargar la librería de Excel. Verificá tu conexión a internet.');
+  document.head.appendChild(script);
+}
+
+function exportBalanceOLD_UNUSED(){
+  const sel=document.getElementById('fin-mes');
+  const mes=sel?sel.value:new Date().toISOString().slice(0,7);
+  const [y,mo]=mes.split('-');
+  const mnames=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const mesLabel=mnames[parseInt(mo)-1]+' '+y;
+
+  const iMes=S.honorarios.filter(h=>h.fecha&&h.fecha.startsWith(mes));
+  const pagosMes=S.pagos.filter(p=>p.fecha&&p.fecha.startsWith(mes));
+  const gMes=S.gastos.filter(g=>g.fecha&&g.fecha.startsWith(mes));
+  if(!S.actos) S.actos=[];
+  const actosMesExp=S.actos.filter(a=>a.fecha&&a.fecha.startsWith(mes));
+  const cobradoJud=pagosMes.reduce((s,p)=>s+p.monto,0);
+  if(!S.pagosExt)S.pagosExt=[];
+  const pagosExtExp=S.pagosExt.filter(p=>p.fecha&&p.fecha.startsWith(mes));
+  const cobradoExtExp=pagosExtExp.reduce((s,p)=>s+p.monto,0);
+  const cobrado=cobradoJud+cobradoExtExp;
+  const totalGasto=gMes.reduce((s,g)=>s+g.monto,0);
+  const balance=cobrado-totalGasto;
+  const totPend=S.honorarios.reduce((s,h)=>s+h.saldo,0)+(S.actos||[]).filter(a=>a.honorario>0&&(a.saldo!==undefined?a.saldo:a.honorario)>0).reduce((s,a)=>s+(a.saldo!==undefined?a.saldo:a.honorario),0);
+
+  const fmt2=(f)=>{if(!f)return'—';const[yy,mm,dd]=f.split('-');return`${dd}/${mm}/${yy}`;};
+  const money2=(n)=>'$'+Number(n||0).toLocaleString('es-AR');
+
+  let html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+  <title>Balance ${mesLabel} — Dr. Pablo Palmiero</title>
+  <style>
+    body{font-family:Arial,sans-serif;font-size:13px;color:#1a1d26;padding:30px 40px;max-width:900px;margin:0 auto;}
+    h1{font-size:22px;margin-bottom:4px;color:#1a1d26;}
+    .sub{color:#5a6070;font-size:13px;margin-bottom:24px;}
+    .cards{display:flex;gap:16px;margin-bottom:28px;}
+    .card{flex:1;border:1px solid #d0d4dc;border-radius:8px;padding:14px 18px;}
+    .card-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#5a6070;}
+    .card-val{font-size:26px;font-weight:700;margin-top:4px;}
+    .green{color:#1e8a4a;}.red{color:#c0392b;}.gold{color:#b8860b;}.orange{color:#c06010;}
+    table{width:100%;border-collapse:collapse;margin-bottom:28px;}
+    th{background:#f3f5f8;text-align:left;padding:9px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:#5a6070;border-bottom:2px solid #d0d4dc;}
+    td{padding:9px 12px;border-bottom:1px solid #e8eaee;font-size:12.5px;}
+    tr:last-child td{border-bottom:none;}
+    .section-title{font-size:15px;font-weight:700;margin:24px 0 10px;padding-bottom:6px;border-bottom:2px solid #d0d4dc;}
+    .footer{margin-top:32px;font-size:11px;color:#9098a8;border-top:1px solid #d0d4dc;padding-top:12px;}
+    @media print{body{padding:20px;}.no-print{display:none;}}
+  
+/* HISTORIAL VENCIMIENTOS */
+.hist-item{display:flex;align-items:flex-start;gap:14px;padding:13px 0;border-bottom:1px solid var(--border);}
+.hist-item:last-child{border-bottom:none;}
+.hist-check{width:28px;height:28px;border-radius:50%;background:var(--green-dim);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:1px;}
+.hist-body{flex:1;}
+.hist-title{font-size:14px;font-weight:600;color:var(--text);}
+.hist-meta{font-size:12px;color:var(--text-sub);margin-top:3px;}
+.hist-fecha{text-align:right;font-size:11px;color:var(--text-dim);white-space:nowrap;}
+.hist-cumplido{font-size:11px;color:var(--green);font-weight:600;margin-top:2px;}
+
+/* AGENDA ALERTAS */
+.alerta-strip{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-radius:10px;margin-bottom:10px;border:1px solid;}
+.alerta-strip.rojo{background:rgba(217,96,96,.12);border-color:rgba(217,96,96,.35);color:#e89090;}
+.alerta-strip.amarillo{background:rgba(212,136,74,.12);border-color:rgba(201,168,76,.35);color:#c9a84c;}
+.alerta-strip.verde{background:rgba(76,175,120,.12);border-color:rgba(76,175,120,.35);color:#4caf78;}
+.alerta-icon{font-size:22px;flex-shrink:0;}
+.alerta-body{flex:1;}
+.alerta-title{font-weight:700;font-size:14px;}
+.alerta-detail{font-size:12.5px;margin-top:4px;line-height:1.5;}
+
+/* LOGIN */
+#login-screen{display:none;position:fixed;inset:0;z-index:9000;background:var(--bg);align-items:center;justify-content:center;}
+#login-screen.visible{display:flex;}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px 40px 36px;width:100%;max-width:400px;box-shadow:0 8px 40px rgba(0,0,0,.15);}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);text-align:center;line-height:1.2;margin-bottom:6px;}
+.login-sub{text-align:center;font-size:12px;color:var(--text-sub);letter-spacing:.1em;text-transform:uppercase;margin-bottom:32px;}
+.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.login-field label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-sub);}
+.login-field input{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:11px 14px;color:var(--text);font-family:'Nunito',sans-serif;font-size:15px;outline:none;transition:border-color .15s;width:100%;}
+.login-field input:focus{border-color:var(--gold);}
+.login-btn{width:100%;background:var(--gold);color:#1e1c16;border:none;border-radius:8px;padding:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;transition:background .15s;}
+.login-btn:hover{background:var(--gold-lt);}
+.login-err{color:var(--red);font-size:12.5px;text-align:center;margin-top:10px;min-height:18px;}
+.logout-btn{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:8px;cursor:pointer;font-size:12px;color:var(--text-sub);transition:all .15s;margin-top:auto;margin:12px 10px 0;}
+.logout-btn:hover{background:var(--surface2);color:var(--red);}
+</style></head><body>
+  <button class="no-print" onclick="window.print()" style="background:#b8860b;color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:13px;margin-bottom:20px">🖨 Imprimir / Guardar PDF</button>
+  <h1>Balance Mensual — Dr. Pablo Palmiero</h1>
+  <div class="sub">Período: <b>${mesLabel}</b> &nbsp;·&nbsp; Generado el ${fmt2(new Date().toISOString().split('T')[0])}</div>
+
+  <div class="cards">
+    <div class="card"><div class="card-label">Cobrado</div><div class="card-val green">${money2(cobrado)}</div></div>
+    <div class="card"><div class="card-label">Gastos</div><div class="card-val red">${money2(totalGasto)}</div></div>
+    <div class="card"><div class="card-label">Ganancia neta</div><div class="card-val ${balance>=0?'gold':'red'}">${money2(balance)}</div></div>
+    <div class="card"><div class="card-label">Honorarios pendientes (total)</div><div class="card-val orange">${money2(totPend)}</div></div>
+  </div>`;
+
+  // Pagos recibidos
+  html+=`<div class="section-title">Pagos recibidos en ${mesLabel}</div>`;
+  if(!pagosMes.length){html+=`<p style="color:#9098a8">Sin pagos en este período.</p>`;}
+  else{
+    html+=`<table><thead><tr><th>Fecha</th><th>Cliente</th><th>Concepto</th><th>Medio de pago</th><th>Referencia</th><th>Monto</th></tr></thead><tbody>`;
+    pagosMes.forEach(p=>{
+      const hon=S.honorarios.find(h=>h.id===p.honorarioId);
+      html+=`<tr><td>${fmt2(p.fecha)}</td><td>${cNom(p.clienteId)}</td><td>${hon?hon.concepto||'—':'—'}</td><td>${p.medio||'—'}</td><td>${p.ref||'—'}</td><td><b>${money2(p.monto)}</b></td></tr>`;
+    });
+    html+=`</tbody></table>`;
+  }
+
+  // Honorarios a percibir
+  html+=`<div class="section-title">Honorarios a percibir en ${mesLabel}</div>`;
+  if(!iMes.length){html+=`<p style="color:#9098a8">Sin honorarios en este período.</p>`;}
+  else{
+    html+=`<table><thead><tr><th>Fecha</th><th>Cliente</th><th>Concepto</th><th>Honorarios a percibir</th><th>Saldo pendiente</th></tr></thead><tbody>`;
+    iMes.forEach(h=>{
+      html+=`<tr><td>${fmt2(h.fecha)}</td><td>${cNom(h.clienteId)}</td><td>${h.concepto||'—'}</td><td>${money2(h.monto)}</td><td style="color:${h.saldo>0?'#c06010':'#1e8a4a'}">${money2(h.saldo)}</td></tr>`;
+    });
+    html+=`</tbody></table>`;
+  }
+
+  // Gastos
+  html+=`<div class="section-title">Gastos en ${mesLabel}</div>`;
+  if(!gMes.length){html+=`<p style="color:#9098a8">Sin gastos en este período.</p>`;}
+  else{
+    html+=`<table><thead><tr><th>Fecha</th><th>Categoría</th><th>Descripción</th><th>Monto</th></tr></thead><tbody>`;
+    gMes.forEach(g=>{
+      html+=`<tr><td>${fmt2(g.fecha)}</td><td>${g.categoria}</td><td>${g.desc||'—'}</td><td><b style="color:#c0392b">${money2(g.monto)}</b></td></tr>`;
+    });
+    html+=`</tbody></table>`;
+  }
+
+  // Honorarios pendientes por cliente
+  const map={};
+  S.honorarios.filter(h=>h.saldo>0).forEach(h=>{
+    const k=h.clienteId||'x';
+    if(!map[k])map[k]={nombre:h.clienteId?cNom(h.clienteId):'Sin cliente',total:0,saldo:0};
+    map[k].total+=h.monto;map[k].saldo+=h.saldo;
+  });
+  const pendEntries=Object.values(map).sort((a,b)=>b.saldo-a.saldo);
+  html+=`<div class="section-title">Honorarios pendientes de cobro (total acumulado)</div>`;
+  if(!pendEntries.length){html+=`<p style="color:#1e8a4a">✅ Sin honorarios pendientes.</p>`;}
+  else{
+    html+=`<table><thead><tr><th>Cliente</th><th>Honorarios a percibir</th><th>Pagado</th><th>Saldo pendiente</th></tr></thead><tbody>`;
+    pendEntries.forEach(e=>{
+      const pagado=e.total-e.saldo;
+      html+=`<tr><td>${e.nombre}</td><td>${money2(e.total)}</td><td style="color:#1e8a4a">${money2(pagado)}</td><td><b style="color:#c06010">${money2(e.saldo)}</b></td></tr>`;
+    });
+    html+=`</tbody></table>`;
+  }
+
+  html+=`<div class="footer">Documento generado por el sistema de gestión del Estudio Jurídico Dr. Pablo Palmiero</div>
+  </body></html>`;
+
+  const win=window.open('','_blank');
+  win.document.write(html);
+  win.document.close();
+}
+
+
+// ── BACKUP & RESTORE ──
+function backupData(){
+  const fecha=new Date().toISOString().split('T')[0];
+  const backup={
+    version:'1.0',
+    fecha,
+    estudio:'Dr. Pablo Palmiero',
+    data:S
+  };
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`backup_estudio_${fecha}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showSync('✓ Backup descargado','ok');
+}
+
+function restoreData(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  if(!confirm('⚠ ATENCIÓN\n\nEsto va a reemplazar TODOS los datos actuales con los del backup.\n\n¿Está seguro?'))return;
+  const reader=new FileReader();
+  reader.onload=async(e)=>{
+    try{
+      const backup=JSON.parse(e.target.result);
+      if(!backup.data) throw new Error('Archivo inválido');
+      S=backup.data;
+      // Asegurar arrays existen
+      S.expedientes=S.expedientes||[];
+      S.clientes=S.clientes||[];
+      S.vencimientos=S.vencimientos||[];
+      S.honorarios=S.honorarios||[];
+      S.pagos=S.pagos||[];
+      S.gastos=S.gastos||[];
+      save();
+      renderAll();
+      showSync('✓ Backup restaurado correctamente','ok');
+      alert(`✅ Backup restaurado correctamente.\nFecha del backup: ${backup.fecha||'desconocida'}\nEstudio: ${backup.estudio||'—'}`);
+    } catch(err){
+      alert('❌ Error al leer el archivo. Verificá que sea un backup válido del sistema.');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value='';
+}
+
+
+// ── ACTOS JURÍDICOS ──
+let actoEditId=null;
+
+function saveActo(){
+  const titulo=document.getElementById('a-titulo').value.trim();
+  if(!titulo){alert('Ingresá un título.');return;}
+  const hon=parseFloat(document.getElementById('a-honorario').value)||0;
+  const existing=actoEditId?S.actos.find(x=>x.id===actoEditId):null;
+  // Recalculate saldo: honorario minus all pagosExt for this acto
+  const pagadoExt=actoEditId?S.pagosExt.filter(p=>p.actoId===actoEditId).reduce((s,p)=>s+p.monto,0):0;
+  const nuevoSaldo=Math.max(0,hon-pagadoExt);
+  const datos={
+    titulo,
+    fecha:document.getElementById('a-fecha').value,
+    clienteId:document.getElementById('a-cli').value,
+    rol:document.getElementById('a-rol')?.value||'',
+    tipo:document.getElementById('a-tipo').value,
+    contrapartes:getContrapartesActo(),
+    estado:document.getElementById('a-estado').value,
+    honorario:hon,
+    saldo:nuevoSaldo,
+    notas:document.getElementById('a-notas').value,
+    docs:existing?existing.docs||[]:[]
+  };
+  if(actoEditId){
+    const idx=S.actos.findIndex(x=>x.id===actoEditId);
+    if(idx>=0) S.actos[idx]={...S.actos[idx],...datos};
+    actoEditId=null;
+  } else {
+    datos.saldo=hon; // nuevo acto: saldo = monto total
+    S.actos.push({id:uid(),...datos});
+  }
+  save();
+  closeM('m-acto');
+  document.getElementById('m-acto-title').textContent='Nuevo Trabajo Extrajudicial';
+  clr(['a-titulo','a-honorario','a-notas']);
+  renderActos();renderDash();
+}
+
+function editActo(id){
+  const a=S.actos.find(x=>x.id===id);
+  if(!a)return;
+  actoEditId=id;
+  populateSels();
+  document.getElementById('m-acto-title').textContent='Editar Trabajo Extrajudicial';
+  document.getElementById('a-fecha').value=a.fecha||'';
+  document.getElementById('a-cli').value=a.clienteId||'';
+  const _arol=document.getElementById('a-rol');if(_arol)_arol.value=a.rol||'Parte actora';
+  renderContrapartesActo(a.contrapartes||[]);
+  document.getElementById('a-tipo').value=a.tipo||'Contrato';
+  document.getElementById('a-estado').value=a.estado||'En proceso';
+  document.getElementById('a-titulo').value=a.titulo||'';
+  document.getElementById('a-honorario').value=a.honorario||'';
+  document.getElementById('a-cobro').value=a.cobro||'Pendiente';
+  const _ap=document.getElementById('a-porc');if(_ap)_ap.value=a.porcentaje||'';
+  const _apb=document.getElementById('a-porc-base');if(_apb)_apb.value=a.porcBase||'Honorario fijo';
+  const _apd=document.getElementById('a-porc-dem');if(_apd)_apd.value=a.porcDem||'';
+  const _apdb=document.getElementById('a-porc-dem-base');if(_apdb)_apdb.value=a.porcDemBase||'% del acto';
+  document.getElementById('a-notas').value=a.notas||'';
+  document.getElementById('m-acto').classList.add('open');
+}
+
+function delActo(id){
+  const a=S.actos.find(x=>x.id===id);
+  if(!a)return;
+  if(!confirm(`¿Eliminar el acto "${a.titulo}"?\n\nEsta acción no se puede deshacer.`))return;
+  S.actos=S.actos.filter(x=>x.id!==id);
+  save();renderActos();renderDash();
+}
+
+function toggleActoDocs(id){
+  const row=document.getElementById('acto-docs-row-'+id);
+  if(!row)return;
+  const visible=row.style.display!=='none';
+  document.querySelectorAll('[id^="acto-docs-row-"]').forEach(r=>r.style.display='none');
+  if(!visible) row.style.display='table-row';
+}
+
+function renderActoDocList(actoId){
+  const cont=document.getElementById('acto-docs-list-'+actoId);
+  if(!cont)return;
+  const a=S.actos.find(x=>x.id===actoId);
+  if(!a)return;
+  const docs=a.docs||[];
+  if(!docs.length){cont.innerHTML='<div style="font-size:13px;color:var(--text-dim);padding:4px 0 8px">Sin documentos. Agregá el primero.</div>';return;}
+  cont.innerHTML=docs.map(d=>`
+    <div class="doc-item">
+      <div class="doc-icon">📄</div>
+      <div style="flex:1">
+        <div class="doc-name">${d.nombre}</div>
+        <div class="doc-type">${d.tipo}${d.fecha?' · '+fmt(d.fecha):''}</div>
+      </div>
+      <div class="doc-actions">
+        <a href="${d.url}" target="_blank" class="btn btn-gold btn-xs">🔗 Abrir</a>
+        <button class="btn btn-danger btn-xs" onclick="delActoDoc('${actoId}','${d.id}')">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function openAddActoDoc(actoId){
+  document.getElementById('d-expid').value='ACTO:'+actoId;
+  document.getElementById('d-nombre').value='';
+  document.getElementById('d-url').value='';
+  document.getElementById('d-fecha').value='';
+  document.getElementById('m-doc').classList.add('open');
+}
+
+function delActoDoc(actoId,docId){
+  if(!confirm('¿Eliminar este documento?'))return;
+  const a=S.actos.find(x=>x.id===actoId);
+  if(!a||!a.docs)return;
+  a.docs=a.docs.filter(d=>d.id!==docId);
+  save();renderActoDocList(actoId);renderActos();
+  const row=document.getElementById('acto-docs-row-'+actoId);
+  if(row)row.style.display='table-row';
+}
+
+function renderActos(){
+  ensureArrays();
+  const q=(document.getElementById('s-acto')?.value||'').toLowerCase();
+  const rows=S.actos.filter(a=>
+    (a.titulo||'').toLowerCase().includes(q)||
+    cNom(a.clienteId).toLowerCase().includes(q)||
+    (a.tipo||'').toLowerCase().includes(q)
+  );
+  document.getElementById('acto-count').textContent=rows.length+' acto'+(rows.length!==1?'s':'');
+  const tb=document.getElementById('t-actos');
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="8"><div class="empty"><div class="empty-icon">📝</div>Sin trabajos extrajudiciales. Creá el primero.</div></td></tr>`;return;}
+
+  const etag={
+    'En proceso':'<span class="tag tag-pending">🔄 En proceso</span>',
+    'Completado':'<span class="tag tag-active">✅ Completado</span>',
+    'Pendiente':'<span class="tag tag-closed">⏳ Pendiente</span>',
+    'Cancelado':'<span class="tag" style="background:var(--red-dim);color:var(--red)">❌ Cancelado</span>',
+  };
+  const ctag={
+    'Cobrado':'<span class="tag tag-active" style="font-size:11px">✅ Cobrado</span>',
+    'Pendiente':'<span class="tag tag-pending" style="font-size:11px">⏳ Pendiente</span>',
+    'Sin honorario':'<span class="tag tag-closed" style="font-size:11px">—</span>',
+  };
+
+  let html='';
+  [...rows].sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||'')).forEach(a=>{
+    const docs=a.docs||[];
+    html+=`<tr>
+      <td data-label="Fecha" style="font-size:13px">${fmt(a.fecha)}</td>
+      <td data-label="Cliente"><div class="td-main">${cNom(a.clienteId)}</div></td>
+      <td data-label="Tipo"><span class="tag tag-civil" style="font-size:11px">${a.tipo}</span></td>
+      <td data-label="Descripción"><div class="td-main">${a.titulo}</div><div class="td-sub">${a.notas?a.notas.slice(0,60)+(a.notas.length>60?'...':''):''}</div></td>
+      <td data-label="Estado">${etag[a.estado]||etag['En proceso']}</td>
+      <td data-label="Honorario">
+        ${a.honorario>0?`<div style="font-weight:700;color:var(--gold)">${$m(a.honorario)}</div>${ctag[a.cobro]||''}` :'<span style="color:var(--text-dim)">—</span>'}
+      </td>
+      <td data-label="Docs"><button class="btn btn-ghost btn-xs" onclick="toggleActoDocs('${a.id}')">📎 ${docs.length} doc${docs.length!==1?'s':''}</button></td>
+      <td data-label="">
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-ghost btn-xs" onclick="editActo('${a.id}')">✏️</button>
+          <button class="btn btn-danger btn-xs" onclick="delActo('${a.id}')">🗑</button>
+        </div>
+      </td>
+    </tr>
+    <tr id="acto-docs-row-${a.id}" style="display:none" class="exp-row-docs">
+      <td colspan="8">
+        <div class="doc-panel">
+          <div class="doc-panel-title">📎 Documentos — ${a.titulo}</div>
+          <div id="acto-docs-list-${a.id}"></div>
+          <button class="btn btn-gold btn-sm" style="margin-top:10px" onclick="openAddActoDoc('${a.id}')">＋ Agregar documento</button>
+        </div>
+      </td>
+    </tr>`;
+  });
+  tb.innerHTML=html;
+  rows.forEach(a=>renderActoDocList(a.id));
+}
+
+
+// ── PAGOS EXTRAJUDICIALES ──
+function populateActosPendientes(){
+  const cliId=document.getElementById('pe-cli')?.value;
+  const sel=document.getElementById('pe-acto');
+  if(!sel)return;
+  sel.innerHTML='<option value="">Seleccionar trabajo pendiente...</option>';
+  document.getElementById('pe-saldo-info').textContent='';
+  if(!cliId)return;
+  const pendientes=(S.actos||[]).filter(a=>a.clienteId===cliId&&a.honorario>0&&(a.saldo===undefined?a.honorario:a.saldo)>0);
+  if(!pendientes.length){
+    sel.innerHTML='<option value="">Sin trabajos pendientes de cobro</option>';
+    return;
+  }
+  pendientes.forEach(a=>{
+    const saldo=a.saldo!==undefined?a.saldo:a.honorario;
+    sel.innerHTML+=`<option value="${a.id}">${a.titulo||a.tipo} — Saldo: $${saldo.toLocaleString('es-AR')}</option>`;
+  });
+}
+
+function savePagoExt(){
+  const actoId=document.getElementById('pe-acto').value;
+  const monto=parseFloat(document.getElementById('pe-monto').value);
+  const cliId=document.getElementById('pe-cli').value;
+  if(!cliId){alert('Seleccioná un cliente.');return;}
+  if(!actoId){alert('Seleccioná el trabajo a pagar.');return;}
+  if(!monto||monto<=0){alert('Ingresá un monto válido.');return;}
+  const acto=S.actos.find(a=>a.id===actoId);
+  if(!acto){alert('Trabajo no encontrado.');return;}
+  const saldoActual=acto.saldo!==undefined?acto.saldo:acto.honorario;
+  if(monto>saldoActual+0.01){alert(`El pago ($${monto.toLocaleString('es-AR')}) supera el saldo pendiente ($${saldoActual.toLocaleString('es-AR')}). Ingresá un monto igual o menor.`);return;}
+  // Registrar pago (ensureArrays recalculará saldo automáticamente)
+  if(!S.pagosExt)S.pagosExt=[];
+  S.pagosExt.push({
+    id:uid(),
+    fecha:document.getElementById('pe-fecha').value,
+    clienteId:cliId,
+    actoId,
+    monto,
+    medio:document.getElementById('pe-medio').value,
+    ref:document.getElementById('pe-ref').value,
+    notas:document.getElementById('pe-notas').value
+  });
+  save();
+  closeM('m-pago-ext');
+  clr(['pe-monto','pe-ref','pe-notas']);
+  const peActoSel=document.getElementById('pe-acto');
+  if(peActoSel) peActoSel.innerHTML='<option value="">Seleccionar trabajo pendiente...</option>';
+  const peSaldoInfo=document.getElementById('pe-saldo-info');
+  if(peSaldoInfo) peSaldoInfo.textContent='';
+  renderAll();
+  renderFin();
+}
+
+function delPagoExt(id){
+  if(!confirm('¿Eliminar este pago? El saldo del trabajo se restaurará.'))return;
+  S.pagosExt=S.pagosExt.filter(p=>p.id!==id);
+  save();renderAll();
+  if(document.getElementById('page-finanzas').classList.contains('active'))renderFin();
+}
+
+function abrirPagoExtCli(cliId){
+  openM('m-pago-ext');
+  setTimeout(()=>{
+    document.getElementById('pe-cli').value=cliId;
+    populateActosPendientes();
+  },50);
+}
+
+// ── PROFESIONALES ──
+let profEditId=null;
+
+function saveProfesional(){
+  const nombre=document.getElementById('prof-nombre').value.trim();
+  const apellido=document.getElementById('prof-apellido').value.trim();
+  if(!nombre||!apellido){alert('Ingresá nombre y apellido.');return;}
+  const datos={
+    nombre,apellido,
+    tipo:document.getElementById('prof-tipo').value,
+    especialidad:document.getElementById('prof-especialidad').value,
+    tel:document.getElementById('prof-tel').value,
+    email:document.getElementById('prof-email').value,
+    domicilio:document.getElementById('prof-dom').value,
+    disponible:document.getElementById('prof-disponible').value,
+    matricula:document.getElementById('prof-matricula').value,
+    obs:document.getElementById('prof-obs').value
+  };
+  if(profEditId){
+    const idx=S.profesionales.findIndex(x=>x.id===profEditId);
+    if(idx>=0) S.profesionales[idx]={...S.profesionales[idx],...datos};
+    profEditId=null;
+  } else {
+    S.profesionales.push({id:uid(),...datos});
+  }
+  save();closeM('m-prof');
+  document.getElementById('m-prof-title').textContent='Nuevo Profesional';
+  clr(['prof-nombre','prof-apellido','prof-tel','prof-email','prof-dom','prof-obs','prof-especialidad','prof-matricula']);
+  renderProfesionales();
+}
+
+function editProfesional(id){
+  const p=S.profesionales.find(x=>x.id===id);
+  if(!p)return;
+  profEditId=id;
+  document.getElementById('m-prof-title').textContent='Editar Profesional';
+  document.getElementById('prof-nombre').value=p.nombre||'';
+  document.getElementById('prof-apellido').value=p.apellido||'';
+  document.getElementById('prof-tipo').value=p.tipo||'Perito';
+  document.getElementById('prof-especialidad').value=p.especialidad||'';
+  document.getElementById('prof-tel').value=p.tel||'';
+  document.getElementById('prof-email').value=p.email||'';
+  document.getElementById('prof-dom').value=p.domicilio||'';
+  document.getElementById('prof-disponible').value=p.disponible||'Sí';
+  document.getElementById('prof-matricula').value=p.matricula||'';
+  document.getElementById('prof-obs').value=p.obs||'';
+  document.getElementById('m-prof').classList.add('open');
+}
+
+function renderProfesionales(){
+  if(!S.profesionales) S.profesionales=[];
+  const q=(document.getElementById('s-prof')?.value||'').toLowerCase();
+  const rows=S.profesionales.filter(p=>
+    (p.nombre+' '+p.apellido).toLowerCase().includes(q)||
+    (p.tipo||'').toLowerCase().includes(q)||
+    (p.especialidad||'').toLowerCase().includes(q)
+  );
+  const cnt=document.getElementById('prof-count');
+  if(cnt) cnt.textContent=rows.length+' profesional'+(rows.length!==1?'es':'');
+  const tb=document.getElementById('t-profesionales');
+  if(!tb)return;
+  if(!rows.length){
+    tb.innerHTML=`<tr><td colspan="7"><div class="empty"><div class="empty-icon">🧑‍💼</div>Sin profesionales cargados.</div></td></tr>`;
+    return;
+  }
+  tb.innerHTML=rows.map(p=>`<tr>
+    <td data-label="Nombre"><div class="td-main">${p.apellido}, ${p.nombre}</div><div class="td-sub">${p.especialidad||''} ${p.matricula?'· Mat. '+p.matricula:''}</div></td>
+    <td data-label="Tipo"><span class="tag tag-civil" style="font-size:11px">${p.tipo}</span></td>
+    <td data-label="Teléfono" style="color:var(--text-sub)">${p.tel||'—'}</td>
+    <td data-label="Email" style="font-size:12px;color:var(--text-sub)">${p.email||'—'}</td>
+    <td data-label="Disponible"><span class="tag ${p.disponible==='Sí'?'tag-active':'tag-closed'}">${p.disponible==='Sí'?'✅ Sí':'❌ No'}</span></td>
+    <td data-label="Observaciones" style="font-size:12px;color:var(--text-sub)">${p.obs||'—'}</td>
+    <td>
+      <div style="display:flex;gap:5px">
+        <button class="btn btn-ghost btn-xs" onclick="editProfesional('${p.id}')">✏️</button>
+        <button class="btn btn-danger btn-xs" onclick="delItem2('profesionales','${p.id}')">🗑</button>
+      </div>
+    </td>
+  </tr>`).join('');
+}
+
+function delItem2(col,id){
+  if(!confirm('¿Eliminar este registro?'))return;
+  S[col]=S[col].filter(x=>x.id!==id);
+  save();renderProfesionales();
+}
+
+// ── BÚSQUEDA DE CLIENTE EN EXPEDIENTE ──
+function buscarCliente(q, resultId, selectId){
+  const res=document.getElementById(resultId);
+  const nuevoLink=document.getElementById('e-cli-nuevo-link');
+  if(!res)return;
+  if(!q||q.length<2){res.style.display='none';if(nuevoLink)nuevoLink.style.display='none';return;}
+  const qClean=q.replace(/[.\-]/g,'');
+  const encontrados=S.clientes.filter(c=>
+    (c.dni||'').replace(/[.\-]/g,'').includes(qClean)||
+    (c.cuil||'').replace(/[.\-]/g,'').includes(qClean)||
+    (c.cuit||'').replace(/[.\-]/g,'').includes(qClean)||
+    c.nombre.toLowerCase().includes(q.toLowerCase())
+  );
+  if(!encontrados.length){
+    res.style.display='block';
+    res.innerHTML=`<div style="padding:10px 14px;font-size:13px;color:var(--text-dim)">No se encontró ningún cliente con ese dato.</div>`;
+    if(nuevoLink) nuevoLink.style.display='block';
+    return;
+  }
+  if(nuevoLink) nuevoLink.style.display='none';
+  res.style.display='block';
+  res.innerHTML=encontrados.map(c=>`
+    <div onclick="seleccionarCliente('${c.id}','${selectId}','${resultId}')"
+      style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);font-size:13px"
+      onmouseover="this.style.background='var(--surface3)'" onmouseout="this.style.background=''">
+      <b>${c.nombre}</b> <span style="color:var(--text-sub);font-size:12px">· ${c.tipoPersona==='Juridica'?'CUIT: '+(c.cuit||'—'):'DNI: '+(c.dni||'Sin DNI')}</span>
+    </div>`).join('');
+}
+
+function seleccionarCliente(cliId, selectId, resultId){
+  const sel=document.getElementById(selectId);
+  const res=document.getElementById(resultId);
+  const search=document.getElementById('e-cli-search');
+  if(sel) sel.value=cliId;
+  if(res) res.style.display='none';
+  if(search){
+    const c=S.clientes.find(x=>x.id===cliId);
+    if(c){const doc=c.tipoPersona==='Juridica'?'CUIT: '+(c.cuit||'—'):'DNI: '+(c.dni||'Sin DNI');search.value=c.nombre+' ('+doc+')';};
+  }
+}
+
+function abrirNuevoClienteDesdeExp(){
+  closeM('m-exp');
+  openM('m-cli');
+  // Mark to return to exp modal after saving
+  window._retornarAExp=true;
+}
+
+// ── CONTRAPARTES DINÁMICAS ──
+let contrapartesCount=0;
+function agregarContraparte(){
+  contrapartesCount++;
+  const lista=document.getElementById('contrapartes-lista');
+  if(!lista)return;
+  const div=document.createElement('div');
+  div.id='contra-item-'+contrapartesCount;
+  div.style.cssText='background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px';
+  div.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span style="font-size:12px;font-weight:700;color:var(--text-sub)">Contraparte ${contrapartesCount}</span>
+      <button type="button" class="btn btn-danger btn-xs" onclick="document.getElementById('contra-item-${contrapartesCount}').remove()">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="fg full"><label>Nombre / Razón social</label><input id="contra-nombre-${contrapartesCount}" placeholder="Nombre o razón social"></div>
+      <div class="fg"><label>Rol en la causa</label>
+        <select id="contra-rol-${contrapartesCount}">
+          <option value="Parte demandada">🛡 Parte demandada</option>
+          <option value="Parte actora">⚔️ Parte actora</option>
+          <option value="Aseguradora">🛡 Aseguradora</option>
+          <option value="Empresa">🏢 Empresa</option>
+          <option value="Organismo público">🏛 Organismo público</option>
+          <option value="Tercero citado">📋 Tercero citado</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div class="fg"><label>DNI / CUIT</label><input id="contra-dni-${contrapartesCount}" placeholder="20-12345678-9"></div>
+      <div class="fg"><label>Abogado / Letrado patrocinante</label><input id="contra-abog-${contrapartesCount}" placeholder="Dr/a. ..."></div>
+      <div class="fg"><label>Teléfono del letrado</label><input id="contra-tel-${contrapartesCount}" placeholder="11 4567-8901"></div>
+      <div class="fg"><label>Email del letrado</label><input id="contra-email-${contrapartesCount}" placeholder="letrado@email.com"></div>
+    </div>`;
+  lista.appendChild(div);
+}
+
+function getContrapartes(){
+  const lista=[];
+  document.querySelectorAll('[id^="contra-item-"]').forEach(item=>{
+    const n=item.id.replace('contra-item-','');
+    const nombre=document.getElementById('contra-nombre-'+n)?.value?.trim();
+    if(nombre) lista.push({
+      nombre,
+      rol:document.getElementById('contra-rol-'+n)?.value||'Parte demandada',
+      dni:document.getElementById('contra-dni-'+n)?.value||'',
+      abogado:document.getElementById('contra-abog-'+n)?.value||'',
+      telAbogado:document.getElementById('contra-tel-'+n)?.value||'',
+      emailAbogado:document.getElementById('contra-email-'+n)?.value||''
+    });
+  });
+  return lista;
+}
+
+function renderContrapartes(contrapartes){
+  const lista=document.getElementById('contrapartes-lista');
+  if(!lista)return;
+  lista.innerHTML='';
+  contrapartesCount=0;
+  (contrapartes||[]).forEach(c=>{
+    contrapartesCount++;
+    const n=contrapartesCount;
+    const rolOpts=[
+      ['Parte demandada','🛡 Parte demandada'],
+      ['Parte actora','⚔️ Parte actora'],
+      ['Aseguradora','🛡 Aseguradora'],
+      ['Empresa','🏢 Empresa'],
+      ['Organismo público','🏛 Organismo público'],
+      ['Tercero citado','📋 Tercero citado'],
+      ['Otro','Otro']
+    ].map(([v,l])=>`<option value="${v}" ${c.rol===v||c.tipo===v?'selected':''}>${l}</option>`).join('');
+    const div=document.createElement('div');
+    div.id='contra-item-'+n;
+    div.style.cssText='background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px';
+    div.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-size:12px;font-weight:700;color:var(--text-sub)">Contraparte ${n}</span>
+        <button type="button" class="btn btn-danger btn-xs" onclick="document.getElementById('contra-item-${n}').remove()">✕</button>
+      </div>
+      <div class="form-grid">
+        <div class="fg full"><label>Nombre / Razón social</label><input id="contra-nombre-${n}" value="${c.nombre||''}" placeholder="Nombre o razón social"></div>
+        <div class="fg"><label>Rol en la causa</label><select id="contra-rol-${n}">${rolOpts}</select></div>
+        <div class="fg"><label>DNI / CUIT</label><input id="contra-dni-${n}" value="${c.dni||''}" placeholder="20-12345678-9"></div>
+        <div class="fg"><label>Abogado / Letrado patrocinante</label><input id="contra-abog-${n}" value="${c.abogado||''}" placeholder="Dr/a. ..."></div>
+        <div class="fg"><label>Teléfono del letrado</label><input id="contra-tel-${n}" value="${c.telAbogado||''}" placeholder="11 4567-8901"></div>
+        <div class="fg"><label>Email del letrado</label><input id="contra-email-${n}" value="${c.emailAbogado||''}" placeholder="letrado@email.com"></div>
+      </div>`;
+    lista.appendChild(div);
+  });
+}
+
+// ── DOCUMENTOS ──
+function toggleCamposDoc(){
+  const tipo=document.getElementById('c-tipo-persona')?.value||'Fisica';
+  const campoDni=document.getElementById('campo-dni');
+  const campoCuil=document.getElementById('campo-cuil');
+  const campoCuit=document.getElementById('campo-cuit');
+  if(campoDni) campoDni.style.display=tipo==='Fisica'?'':'none';
+  if(campoCuil) campoCuil.style.display=tipo==='Fisica'?'':'none';
+  if(campoCuit) campoCuit.style.display=tipo==='Juridica'?'':'none';
+}
+
+function formatDoc(input){} // sin formato automático
+
+
+function checkDuplicateClient(val){
+  const alertDni=document.getElementById('c-dni-alert');
+  const alertCuit=document.getElementById('c-cuit-alert');
+  const alertEl=alertDni&&alertDni.closest('#campo-dni')?.style.display!=='none'?alertDni:alertCuit;
+  if(!alertEl)return;
+  if(!val||val.replace(/[.\-]/g,'').length<6){alertEl.style.display='none';return;}
+  const clean=val.replace(/[.\-]/g,'');
+  const existe=S.clientes.find(c=>
+    (c.dni||'').replace(/[.\-]/g,'')===clean||
+    (c.cuil||'').replace(/[.\-]/g,'')===clean||
+    (c.cuit||'').replace(/[.\-]/g,'')===clean
+  );
+  if(existe){
+    alertEl.style.display='block';
+    alertEl.innerHTML=`⚠ Ya existe en el sistema: <b>${existe.nombre}</b>`;
+  } else {
+    alertEl.style.display='none';
+  }
+}
+
+
+// ── CONTRAPARTES EXTRAJUDICIALES ──
+let actoContrapartesCount=0;
+
+function agregarContraparteActo(){
+  actoContrapartesCount++;
+  const lista=document.getElementById('acto-contrapartes-lista');
+  if(!lista)return;
+  const n=actoContrapartesCount;
+  const div=document.createElement('div');
+  div.id='acto-contra-item-'+n;
+  div.style.cssText='background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px';
+  div.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span style="font-size:12px;font-weight:700;color:var(--text-sub)">Contraparte ${n}</span>
+      <button type="button" class="btn btn-danger btn-xs" onclick="document.getElementById('acto-contra-item-${n}').remove()">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="fg full"><label>Nombre / Razón social</label><input id="acto-contra-nombre-${n}" placeholder="Nombre o razón social"></div>
+      <div class="fg"><label>Rol en el asunto</label>
+        <select id="acto-contra-rol-${n}">
+          <option value="Parte demandada">🛡 Parte demandada</option>
+          <option value="Parte actora">⚔️ Parte actora</option>
+          <option value="Aseguradora">🛡 Aseguradora</option>
+          <option value="Empresa">🏢 Empresa</option>
+          <option value="Organismo público">🏛 Organismo público</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div class="fg"><label>DNI / CUIT</label><input id="acto-contra-dni-${n}" placeholder="20-12345678-9"></div>
+      <div class="fg"><label>Abogado / Letrado patrocinante</label><input id="acto-contra-abog-${n}" placeholder="Dr/a. ..."></div>
+      <div class="fg"><label>Teléfono del letrado</label><input id="acto-contra-tel-${n}" placeholder="11 4567-8901"></div>
+      <div class="fg"><label>Email del letrado</label><input id="acto-contra-email-${n}" placeholder="letrado@email.com"></div>
+    </div>`;
+  lista.appendChild(div);
+}
+
+function getContrapartesActo(){
+  const lista=[];
+  document.querySelectorAll('[id^="acto-contra-item-"]').forEach(item=>{
+    const n=item.id.replace('acto-contra-item-','');
+    const nombre=document.getElementById('acto-contra-nombre-'+n)?.value?.trim();
+    if(nombre) lista.push({
+      nombre,
+      rol:document.getElementById('acto-contra-rol-'+n)?.value||'Parte demandada',
+      dni:document.getElementById('acto-contra-dni-'+n)?.value||'',
+      abogado:document.getElementById('acto-contra-abog-'+n)?.value||'',
+      telAbogado:document.getElementById('acto-contra-tel-'+n)?.value||'',
+      emailAbogado:document.getElementById('acto-contra-email-'+n)?.value||''
+    });
+  });
+  return lista;
+}
+
+function renderContrapartesActo(contrapartes){
+  const lista=document.getElementById('acto-contrapartes-lista');
+  if(!lista)return;
+  lista.innerHTML='';
+  actoContrapartesCount=0;
+  (contrapartes||[]).forEach(c=>{
+    actoContrapartesCount++;
+    const n=actoContrapartesCount;
+    const rolOpts=[
+      ['Parte demandada','🛡 Parte demandada'],
+      ['Parte actora','⚔️ Parte actora'],
+      ['Aseguradora','🛡 Aseguradora'],
+      ['Empresa','🏢 Empresa'],
+      ['Organismo público','🏛 Organismo público'],
+      ['Otro','Otro']
+    ].map(([v,l])=>`<option value="${v}" ${c.rol===v?'selected':''}>${l}</option>`).join('');
+    const div=document.createElement('div');
+    div.id='acto-contra-item-'+n;
+    div.style.cssText='background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px';
+    div.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-size:12px;font-weight:700;color:var(--text-sub)">Contraparte ${n}</span>
+        <button type="button" class="btn btn-danger btn-xs" onclick="document.getElementById('acto-contra-item-${n}').remove()">✕</button>
+      </div>
+      <div class="form-grid">
+        <div class="fg full"><label>Nombre / Razón social</label><input id="acto-contra-nombre-${n}" value="${c.nombre||''}" placeholder="Nombre o razón social"></div>
+        <div class="fg"><label>Rol en el asunto</label><select id="acto-contra-rol-${n}">${rolOpts}</select></div>
+        <div class="fg"><label>DNI / CUIT</label><input id="acto-contra-dni-${n}" value="${c.dni||''}" placeholder="20-12345678-9"></div>
+        <div class="fg"><label>Abogado / Letrado patrocinante</label><input id="acto-contra-abog-${n}" value="${c.abogado||''}" placeholder="Dr/a. ..."></div>
+        <div class="fg"><label>Teléfono del letrado</label><input id="acto-contra-tel-${n}" value="${c.telAbogado||''}" placeholder="11 4567-8901"></div>
+        <div class="fg"><label>Email del letrado</label><input id="acto-contra-email-${n}" value="${c.emailAbogado||''}" placeholder="letrado@email.com"></div>
+      </div>`;
+    lista.appendChild(div);
+  });
+}
+
+// ── RENDER ALL ──
+function renderAll(){
+  ensureArrays();
+  try{renderDash();}catch(e){console.error('renderDash:',e);}
+  try{renderExp();}catch(e){console.error('renderExp:',e);}
+  try{renderCli();}catch(e){console.error('renderCli:',e);}
+  try{renderVenc();}catch(e){console.error('renderVenc:',e);}
+  try{renderActos();}catch(e){console.error('renderActos:',e);}
+  try{renderProfesionales();}catch(e){console.error('renderProfesionales:',e);}
+  try{updateAgendaBadges();}catch(e){}
+}
+
+// ── INIT ──
+const _n=new Date();
+const _ds=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const _ms=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+document.getElementById('hoy-label').textContent=`${_ds[_n.getDay()]}, ${_n.getDate()} de ${_ms[_n.getMonth()]} de ${_n.getFullYear()}`;
+
+// Verificar sesión al cargar
+checkSession();
+</script>
+
+<!-- Modal Trabajo Extrajudicial -->
+<div class="modal-wrap" id="m-acto">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-title" id="m-acto-title">Nuevo Trabajo Extrajudicial</div>
+    <div class="form-grid">
+      <div class="fg"><label>Fecha</label><input type="date" id="a-fecha"></div>
+      <div class="fg"><label>Cliente</label><select id="a-cli"><option value="">Seleccionar...</option></select></div>
+      <div class="fg"><label>Tipo de acto</label>
+        <select id="a-tipo">
+          <option>Contrato</option>
+          <option>Carta documento</option>
+          <option>Asesoramiento / Consulta</option>
+          <option>Poder notarial</option>
+          <option>Acta</option>
+          <option>Certificación</option>
+          <option>Mediación extrajudicial</option>
+          <option>Redacción de documento</option>
+          <option>Estudio de títulos</option>
+          <option>Dictamen jurídico</option>
+          <option>Trámite administrativo</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="fg"><label>Estado</label>
+        <select id="a-estado">
+          <option value="En proceso">🔄 En proceso</option>
+          <option value="Completado">✅ Completado</option>
+          <option value="Pendiente">⏳ Pendiente</option>
+          <option value="Cancelado">❌ Cancelado</option>
+        </select>
+      </div>
+      <div class="fg"><label>Mi rol en el asunto</label>
+        <select id="a-rol">
+          <option value="Parte actora">⚔️ Parte actora (demandante)</option>
+          <option value="Parte demandada">🛡 Parte demandada</option>
+          <option value="Requirente">📋 Requirente</option>
+          <option value="Asesor">💼 Asesor jurídico</option>
+          <option value="Mediador">🤝 Mediador</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div class="fg full"><label>Título / Descripción breve</label><input id="a-titulo" placeholder="Ej: Contrato de locación — García/López"></div>
+      <div class="fg"><label>Honorario pactado ($)</label><input type="number" id="a-honorario" placeholder="0"></div>
+      <div class="fg"><label>Estado de cobro</label>
+        <select id="a-cobro">
+          <option value="Sin honorario">— Sin honorario</option>
+          <option value="Con honorario">💰 Con honorario</option>
+        </select>
+      </div>
+      <p style="font-size:11.5px;color:var(--text-sub);grid-column:1/-1;margin-top:-4px">💡 El honorario queda pendiente. Usá "💳 Pago extrajudicial" para registrar cobros y descontarlos.</p>
+      <div style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);font-weight:700;margin-bottom:10px">⚔️ Contraparte</div>
+        <div id="acto-contrapartes-lista"></div>
+        <button type="button" class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="agregarContraparteActo()">＋ Agregar contraparte</button>
+      </div>
+
+      <div style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);font-weight:700;margin-bottom:10px">💰 Honorarios</div>
+      </div>
+      <div class="fg"><label>% Parte actora (quien defiendo)</label>
+        <input type="number" id="a-porc" placeholder="Ej: 10" min="0" max="100" step="0.5">
+        <div style="font-size:11px;color:var(--text-sub);margin-top:3px">% acordado con mi cliente</div>
+      </div>
+      <div class="fg"><label>Base de cálculo — Actora</label>
+        <select id="a-porc-base">
+          <option value="Honorario fijo">Honorario fijo</option>
+          <option value="% del acto">% del monto del acto</option>
+          <option value="A determinar">A determinar</option>
+        </select>
+      </div>
+      <div class="fg"><label>% Parte demandada (contraparte)</label>
+        <input type="number" id="a-porc-dem" placeholder="Ej: 10" min="0" max="100" step="0.5">
+        <div style="font-size:11px;color:var(--text-sub);margin-top:3px">% a cobrar a la contraparte</div>
+      </div>
+      <div class="fg"><label>Base de cálculo — Demandada</label>
+        <select id="a-porc-dem-base">
+          <option value="% del acto">% del monto del acto</option>
+          <option value="Honorario fijo">Honorario fijo</option>
+          <option value="A determinar">A determinar</option>
+        </select>
+      </div>
+      <div class="fg full"><label>Detalle / Notas</label><textarea id="a-notas" placeholder="Descripción detallada del acto, partes intervinientes, condiciones..."></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeM('m-acto');actoEditId=null">Cancelar</button>
+      <button class="btn btn-gold" onclick="saveActo()">Guardar acto</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Pago Extrajudicial -->
+<div class="modal-wrap" id="m-pago-ext">
+  <div class="modal">
+    <div class="modal-title">Registrar Pago Extrajudicial</div>
+    <div class="form-grid">
+      <div class="fg"><label>Fecha del pago</label><input type="date" id="pe-fecha"></div>
+      <div class="fg"><label>Cliente</label><select id="pe-cli" onchange="populateActosPendientes()"><option value="">Seleccionar...</option></select></div>
+      <div class="fg full"><label>Trabajo a pagar</label><select id="pe-acto"><option value="">Seleccionar trabajo pendiente...</option></select></div>
+      <div class="fg"><label>Monto pagado ($)</label><input type="number" id="pe-monto" placeholder="0"></div>
+      <div class="fg"><label>Medio de pago</label>
+        <select id="pe-medio">
+          <option value="Transferencia bancaria">🏦 Transferencia bancaria</option>
+          <option value="Efectivo">💵 Efectivo</option>
+          <option value="Cheque">📝 Cheque</option>
+          <option value="Depósito bancario">🏧 Depósito bancario</option>
+          <option value="Tarjeta de crédito">💳 Tarjeta de crédito</option>
+          <option value="Tarjeta de débito">💳 Tarjeta de débito</option>
+          <option value="MercadoPago">📱 MercadoPago</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div class="fg full"><label>Nº Comprobante / Referencia (opcional)</label><input id="pe-ref" placeholder="Ej: nº transferencia, recibo..."></div>
+      <div class="fg full"><label>Notas (opcional)</label><input id="pe-notas" placeholder="Observaciones..."></div>
+    </div>
+    <div id="pe-saldo-info" style="margin-top:10px;font-size:12px;color:var(--text-sub)"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeM('m-pago-ext')">Cancelar</button>
+      <button class="btn btn-gold" onclick="savePagoExt()">Registrar pago</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Documentos -->
+<div class="modal-wrap" id="m-doc">
+  <div class="modal">
+    <div class="modal-title">📎 Agregar Documento</div>
+    <p style="font-size:13px;color:var(--text-sub);margin-bottom:16px">
+      Subí el PDF a Google Drive, OneDrive o Dropbox, copiá el enlace para compartir, y pegalo acá.
+    </p>
+    <input type="hidden" id="d-expid">
+    <div class="form-grid">
+      <div class="fg full"><label>Nombre del documento</label><input id="d-nombre" placeholder="Ej: Escrito de demanda, Prueba documental, Sentencia..."></div>
+      <div class="fg"><label>Tipo</label>
+        <select id="d-tipo">
+          <option>Escrito</option><option>Demanda</option><option>Contestación</option>
+          <option>Prueba documental</option><option>Pericia</option>
+          <option>Sentencia</option><option>Resolución</option><option>Otro</option>
+        </select>
+      </div>
+      <div class="fg"><label>Fecha (opcional)</label><input type="date" id="d-fecha"></div>
+      <div class="fg full"><label>Enlace (Google Drive / OneDrive / Dropbox)</label>
+        <input id="d-url" placeholder="https://drive.google.com/file/d/..."></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeM('m-doc')">Cancelar</button>
+      <button class="btn btn-gold" onclick="saveDoc()">Agregar documento</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
