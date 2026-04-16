@@ -7,9 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:#1c1f2a;--surface:#242836;--surface2:#2c3044;--surface3:#353a50;
-  --border:#3e4560;--gold:#c9a84c;--gold-lt:#ddb95a;--gold-dim:rgba(201,168,76,.15);
-  --text:#e8e4d8;--text-sub:#9a96a0;--text-dim:#5e5e6e;
+  --bg:#111111;--surface:#1a1a1a;--surface2:#222222;--surface3:#2a2a2a;
+  --border:#333333;--gold:#c9a84c;--gold-lt:#ddb95a;--gold-dim:rgba(201,168,76,.15);
+  --text:#e8e4d8;--text-sub:#9a96a0;--text-dim:#5a5a5a;
   --green:#4caf78;--green-dim:rgba(76,175,120,.15);
   --red:#d96060;--red-dim:rgba(217,96,96,.15);
   --orange:#d4884a;--orange-dim:rgba(212,136,74,.15);
@@ -17,11 +17,63 @@
   --radius:10px;--shadow:0 4px 20px rgba(0,0,0,.30);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);font-size:16.5px;}
+html,body{height:100%;font-family:'Nunito',sans-serif;color:var(--text);font-size:16.5px;}
+body{
+  background-color:#0f0f0f;
+  background-image:
+    /* Venas principales doradas — más visibles */
+    repeating-linear-gradient(
+      118deg,
+      transparent 0px,
+      transparent 55px,
+      rgba(201,168,76,0.07) 55px,
+      rgba(201,168,76,0.09) 56px,
+      rgba(201,168,76,0.04) 57px,
+      transparent 58px,
+      transparent 130px,
+      rgba(255,255,255,0.05) 130px,
+      rgba(255,255,255,0.07) 131px,
+      rgba(255,255,255,0.03) 132px,
+      transparent 133px,
+      transparent 200px,
+      rgba(201,168,76,0.05) 200px,
+      rgba(201,168,76,0.06) 201px,
+      transparent 202px,
+      transparent 340px
+    ),
+    /* Venas cruzadas blancas */
+    repeating-linear-gradient(
+      58deg,
+      transparent 0px,
+      transparent 80px,
+      rgba(255,255,255,0.04) 80px,
+      rgba(255,255,255,0.06) 81px,
+      rgba(255,255,255,0.02) 82px,
+      transparent 83px,
+      transparent 190px,
+      rgba(201,168,76,0.04) 190px,
+      rgba(201,168,76,0.05) 191px,
+      transparent 192px,
+      transparent 310px
+    ),
+    /* Venas finas adicionales */
+    repeating-linear-gradient(
+      145deg,
+      transparent 0px,
+      transparent 110px,
+      rgba(255,255,255,0.03) 110px,
+      rgba(255,255,255,0.04) 111px,
+      transparent 112px,
+      transparent 260px
+    ),
+    /* Profundidad — zonas más claras y más oscuras */
+    radial-gradient(ellipse at 15% 30%, #1c1c1c 0%, #0f0f0f 45%, #080808 100%),
+    radial-gradient(ellipse at 80% 70%, #181818 0%, #0f0f0f 50%);
+}
 .app{display:flex;height:100vh;overflow:hidden;}
 
 /* SIDEBAR */
-.sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;transition:transform .3s;z-index:200;}
+.sidebar{width:220px;min-width:220px;background:linear-gradient(180deg,#202020 0%,#1a1a1a 100%);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;transition:transform .3s;z-index:200;}
 .logo{padding:22px 20px 18px;border-bottom:1px solid var(--border);}
 .logo-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--gold);line-height:1.2;}
 .logo-sub{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-top:3px;}
@@ -245,7 +297,7 @@ textarea{resize:vertical;min-height:75px;}
 .alerta-detail{font-size:12.5px;margin-top:4px;line-height:1.5;}
 
 /* LOGIN */
-#login-screen{display:none;position:fixed;inset:0;z-index:9000;background:var(--bg);align-items:center;justify-content:center;}
+#login-screen{display:none;position:fixed;inset:0;z-index:9000;background:#111111;align-items:center;justify-content:center;}
 #login-screen.visible{display:flex;}
 .login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px 40px 36px;width:100%;max-width:400px;box-shadow:0 8px 40px rgba(0,0,0,.15);}
 .login-logo{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);text-align:center;line-height:1.2;margin-bottom:6px;}
@@ -259,6 +311,24 @@ textarea{resize:vertical;min-height:75px;}
 .login-err{color:var(--red);font-size:12.5px;text-align:center;margin-top:10px;min-height:18px;}
 .logout-btn{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:8px;cursor:pointer;font-size:12px;color:var(--text-sub);transition:all .15s;margin-top:auto;margin:12px 10px 0;}
 .logout-btn:hover{background:var(--surface2);color:var(--red);}
+
+/* ── ALERTA DE VENCIMIENTOS ── */
+#modal-venc-alert{display:none;position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.7);align-items:center;justify-content:center;padding:16px;}
+#modal-venc-alert.open{display:flex;}
+.venc-alert-box{background:var(--surface);border:2px solid var(--gold);border-radius:16px;width:100%;max-width:520px;max-height:80vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.venc-alert-header{background:linear-gradient(135deg,var(--red),#8b0000);border-radius:14px 14px 0 0;padding:18px 24px;display:flex;align-items:center;gap:12px;}
+.venc-alert-icon{font-size:28px;}
+.venc-alert-title{color:#fff;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;}
+.venc-alert-sub{color:rgba(255,255,255,.8);font-size:12px;margin-top:2px;}
+.venc-alert-body{padding:18px 24px;}
+.venc-alert-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:8px;margin-bottom:8px;border-left:4px solid var(--red);}
+.venc-alert-item.hoy{background:rgba(217,96,96,.12);border-color:var(--red);}
+.venc-alert-item.prox{background:rgba(212,136,74,.1);border-color:var(--orange);}
+.venc-alert-item-dias{font-size:11px;font-weight:700;color:#fff;background:var(--red);padding:3px 8px;border-radius:5px;white-space:nowrap;flex-shrink:0;margin-top:2px;}
+.venc-alert-item-dias.prox{background:var(--orange);}
+.venc-alert-item-desc{font-weight:600;font-size:14px;color:var(--text);}
+.venc-alert-item-meta{font-size:12px;color:var(--text-sub);margin-top:2px;}
+.venc-alert-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
 </style>
 </head>
 <body>
@@ -315,7 +385,8 @@ textarea{resize:vertical;min-height:75px;}
       <input type="file" id="restore-input" accept=".json" style="display:none" onchange="restoreData(event)">
     </div>
   </div>
-  <div class="logout-btn" onclick="doLogout()">🔒 Cerrar sesión</div>
+  <div class="logout-btn" onclick="pedirPermisoNotificaciones()" style="color:var(--gold)">🔔 Activar notificaciones</div>
+    <div class="logout-btn" onclick="doLogout()">🔒 Cerrar sesión</div>
 </aside>
 
 <!-- MAIN -->
@@ -958,7 +1029,7 @@ function showApp(){
   if(ls) ls.style.display='none';
   const app=document.getElementById('main-app');
   if(app) app.style.display='flex';
-  load().then(()=>{ renderAll(); });
+  load().then(()=>{ renderAll(); setTimeout(mostrarAlertaVencimientos, 800); });
 }
 
 // Verificar si ya hay sesión activa al cargar
@@ -2302,7 +2373,7 @@ function exportBalanceOLD_UNUSED(){
 .alerta-detail{font-size:12.5px;margin-top:4px;line-height:1.5;}
 
 /* LOGIN */
-#login-screen{display:none;position:fixed;inset:0;z-index:9000;background:var(--bg);align-items:center;justify-content:center;}
+#login-screen{display:none;position:fixed;inset:0;z-index:9000;background:#111111;align-items:center;justify-content:center;}
 #login-screen.visible{display:flex;}
 .login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px 40px 36px;width:100%;max-width:400px;box-shadow:0 8px 40px rgba(0,0,0,.15);}
 .login-logo{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);text-align:center;line-height:1.2;margin-bottom:6px;}
@@ -2316,6 +2387,24 @@ function exportBalanceOLD_UNUSED(){
 .login-err{color:var(--red);font-size:12.5px;text-align:center;margin-top:10px;min-height:18px;}
 .logout-btn{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:8px;cursor:pointer;font-size:12px;color:var(--text-sub);transition:all .15s;margin-top:auto;margin:12px 10px 0;}
 .logout-btn:hover{background:var(--surface2);color:var(--red);}
+
+/* ── ALERTA DE VENCIMIENTOS ── */
+#modal-venc-alert{display:none;position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.7);align-items:center;justify-content:center;padding:16px;}
+#modal-venc-alert.open{display:flex;}
+.venc-alert-box{background:var(--surface);border:2px solid var(--gold);border-radius:16px;width:100%;max-width:520px;max-height:80vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.5);}
+.venc-alert-header{background:linear-gradient(135deg,var(--red),#8b0000);border-radius:14px 14px 0 0;padding:18px 24px;display:flex;align-items:center;gap:12px;}
+.venc-alert-icon{font-size:28px;}
+.venc-alert-title{color:#fff;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;}
+.venc-alert-sub{color:rgba(255,255,255,.8);font-size:12px;margin-top:2px;}
+.venc-alert-body{padding:18px 24px;}
+.venc-alert-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:8px;margin-bottom:8px;border-left:4px solid var(--red);}
+.venc-alert-item.hoy{background:rgba(217,96,96,.12);border-color:var(--red);}
+.venc-alert-item.prox{background:rgba(212,136,74,.1);border-color:var(--orange);}
+.venc-alert-item-dias{font-size:11px;font-weight:700;color:#fff;background:var(--red);padding:3px 8px;border-radius:5px;white-space:nowrap;flex-shrink:0;margin-top:2px;}
+.venc-alert-item-dias.prox{background:var(--orange);}
+.venc-alert-item-desc{font-weight:600;font-size:14px;color:var(--text);}
+.venc-alert-item-meta{font-size:12px;color:var(--text-sub);margin-top:2px;}
+.venc-alert-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
 </style></head><body>
   <button class="no-print" onclick="window.print()" style="background:#b8860b;color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:13px;margin-bottom:20px">🖨 Imprimir / Guardar PDF</button>
   <h1>Balance Mensual — Estudio Talavera & Palmiero</h1>
@@ -2382,7 +2471,26 @@ function exportBalanceOLD_UNUSED(){
   }
 
   html+=`<div class="footer">Documento generado por el sistema de gestión del Estudio Jurídico Estudio Talavera & Palmiero</div>
-  </body></html>`;
+  
+<!-- Modal Alertas de Vencimientos -->
+<div id="modal-venc-alert">
+  <div class="venc-alert-box">
+    <div class="venc-alert-header">
+      <div class="venc-alert-icon">⚠️</div>
+      <div>
+        <div class="venc-alert-title">Vencimientos urgentes</div>
+        <div class="venc-alert-sub" id="venc-alert-sub">Revisá los plazos pendientes</div>
+      </div>
+    </div>
+    <div class="venc-alert-body" id="venc-alert-body"></div>
+    <div class="venc-alert-footer">
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('modal-venc-alert').classList.remove('open')">Cerrar</button>
+      <button class="btn btn-gold btn-sm" onclick="document.getElementById('modal-venc-alert').classList.remove('open');goTo('vencimientos',document.querySelector('[onclick*=vencimientos]'))">Ver vencimientos →</button>
+    </div>
+  </div>
+</div>
+
+</body></html>`;
 
   const win=window.open('','_blank');
   win.document.write(html);
@@ -2460,6 +2568,10 @@ function saveActo(){
     estado:document.getElementById('a-estado').value,
     honorario:hon,
     saldo:nuevoSaldo,
+    porcentaje:document.getElementById('a-porc')?.value||'',
+    porcBase:document.getElementById('a-porc-base')?.value||'',
+    porcDem:document.getElementById('a-porc-dem')?.value||'',
+    porcDemBase:document.getElementById('a-porc-dem-base')?.value||'',
     notas:document.getElementById('a-notas').value,
     docs:existing?existing.docs||[]:[]
   };
@@ -2587,7 +2699,13 @@ function renderActos(){
       <td data-label="Fecha" style="font-size:13px">${fmt(a.fecha)}</td>
       <td data-label="Cliente"><div class="td-main">${cNom(a.clienteId)}</div></td>
       <td data-label="Tipo"><span class="tag tag-civil" style="font-size:11px">${a.tipo}</span></td>
-      <td data-label="Descripción"><div class="td-main">${a.titulo}</div><div class="td-sub">${a.notas?a.notas.slice(0,60)+(a.notas.length>60?'...':''):''}</div></td>
+      <td data-label="Descripción">
+        <div class="td-main">${a.titulo}</div>
+        <div class="td-sub">${a.notas?a.notas.slice(0,60)+(a.notas.length>60?'...':''):''}</div>
+        ${a.porcentaje?`<div class="td-sub" style="color:var(--gold);font-size:11px">⚖️ Actora: ${a.porcentaje}% ${a.porcBase?'('+a.porcBase+')':''}</div>`:''}
+        ${a.porcDem?`<div class="td-sub" style="color:var(--orange);font-size:11px">⚖️ Demandada: ${a.porcDem}% ${a.porcDemBase?'('+a.porcDemBase+')':''}</div>`:''}
+        ${a.rol?`<div class="td-sub" style="color:var(--text-dim);font-size:11px">Mi rol: ${a.rol}</div>`:''}
+      </td>
       <td data-label="Estado">${etag[a.estado]||etag['En proceso']}</td>
       <td data-label="Honorario">
         ${a.honorario>0?`<div style="font-weight:700;color:var(--gold)">${$m(a.honorario)}</div>${ctag[a.cobro]||''}` :'<span style="color:var(--text-dim)">—</span>'}
@@ -3031,6 +3149,88 @@ function renderContrapartesActo(contrapartes){
   });
 }
 
+
+// ── SISTEMA DE ALERTAS DE VENCIMIENTOS ──
+
+function mostrarAlertaVencimientos(){
+  if(!S.vencimientos) return;
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+
+  // Filtrar vencimientos de hoy y próximos 3 días, no cumplidos
+  const urgentes = S.vencimientos
+    .filter(v => !v.cumplido && days(v.fecha) >= 0 && days(v.fecha) <= 3)
+    .sort((a,b) => a.fecha.localeCompare(b.fecha));
+
+  if(!urgentes.length) return; // No mostrar si no hay urgentes
+
+  const body = document.getElementById('venc-alert-body');
+  const sub  = document.getElementById('venc-alert-sub');
+  if(!body || !sub) return;
+
+  sub.textContent = urgentes.length + ' vencimiento' + (urgentes.length !== 1 ? 's' : '') + ' requieren atención inmediata';
+
+  body.innerHTML = urgentes.map(v => {
+    const d = days(v.fecha);
+    const esHoy = d === 0;
+    const label = esHoy ? '¡HOY!' : d === 1 ? 'Mañana' : 'En ' + d + ' días';
+    const expNro = v.expId ? S.expedientes.find(e=>e.id===v.expId)?.nro : null;
+    return `<div class="venc-alert-item ${esHoy ? 'hoy' : 'prox'}">
+      <span class="venc-alert-item-dias ${esHoy ? '' : 'prox'}">${label}</span>
+      <div>
+        <div class="venc-alert-item-desc">${v.desc}</div>
+        <div class="venc-alert-item-meta">${v.tipo||''}${expNro ? ' · Expte. ' + expNro : ''} · ${fmt(v.fecha)}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Mostrar modal
+  document.getElementById('modal-venc-alert').classList.add('open');
+
+  // Enviar notificaciones del navegador si tiene permiso
+  enviarNotificacionesNavegador(urgentes);
+}
+
+function enviarNotificacionesNavegador(urgentes){
+  if(!('Notification' in window)) return;
+
+  if(Notification.permission === 'granted'){
+    urgentes.forEach(v => {
+      const d = days(v.fecha);
+      const titulo = d === 0 ? '⚠️ Vencimiento HOY' : `⚠️ Vence en ${d} día${d!==1?'s':''}`;
+      try {
+        new Notification(titulo, {
+          body: v.desc + (v.expId ? ' · Expte. ' + (S.expedientes.find(e=>e.id===v.expId)?.nro||'') : ''),
+          icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">⚖️</text></svg>',
+          tag: 'venc-' + v.id, // evita duplicados
+          requireInteraction: d === 0 // HOY queda fija hasta que el usuario la cierre
+        });
+      } catch(e){}
+    });
+  } else if(Notification.permission !== 'denied'){
+    // Pedir permiso la primera vez
+    Notification.requestPermission().then(perm => {
+      if(perm === 'granted') enviarNotificacionesNavegador(urgentes);
+    });
+  }
+}
+
+function pedirPermisoNotificaciones(){
+  if(!('Notification' in window)){
+    alert('Tu navegador no soporta notificaciones.');
+    return;
+  }
+  Notification.requestPermission().then(perm => {
+    if(perm === 'granted'){
+      new Notification('✅ Notificaciones activadas', {
+        body: 'Recibirás avisos cuando haya vencimientos próximos al abrir el sistema.',
+        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">⚖️</text></svg>'
+      });
+    } else {
+      alert('Notificaciones denegadas. Podés activarlas desde la configuración del navegador.');
+    }
+  });
+}
+
 // ── RENDER ALL ──
 function renderAll(){
   ensureArrays();
@@ -3203,5 +3403,24 @@ checkSession();
     </div>
   </div>
 </div>
+
+<!-- Modal Alertas de Vencimientos -->
+<div id="modal-venc-alert">
+  <div class="venc-alert-box">
+    <div class="venc-alert-header">
+      <div class="venc-alert-icon">⚠️</div>
+      <div>
+        <div class="venc-alert-title">Vencimientos urgentes</div>
+        <div class="venc-alert-sub" id="venc-alert-sub">Revisá los plazos pendientes</div>
+      </div>
+    </div>
+    <div class="venc-alert-body" id="venc-alert-body"></div>
+    <div class="venc-alert-footer">
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('modal-venc-alert').classList.remove('open')">Cerrar</button>
+      <button class="btn btn-gold btn-sm" onclick="document.getElementById('modal-venc-alert').classList.remove('open');goTo('vencimientos',document.querySelector('[onclick*=vencimientos]'))">Ver vencimientos →</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
